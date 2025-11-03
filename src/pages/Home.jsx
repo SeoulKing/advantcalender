@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { createCalendar, getCalendar, findCalendarByName, checkCalendarNameExists } from '../lib/firestore';
 import { saveCalendarLink, getCalendarLinks, generateCalendarLink, generateGuestLink } from '../lib/localStorage';
 import { isFirebaseAvailable } from '../lib/mockStorage';
-import { resetAllData } from '../lib/reset';
 import AdSenseController from '../components/AdSenseController';
 
 export default function Home() {
@@ -229,18 +228,6 @@ export default function Home() {
     alert('✅ 링크가 복사되었습니다!');
   };
 
-  const handleResetData = () => {
-    const confirmReset = window.confirm(
-      '⚠️ 정말로 모든 데이터를 초기화하시겠습니까?\n\n저장된 모든 캘린더와 메시지가 삭제됩니다.\n\n이 작업은 되돌릴 수 없습니다!'
-    );
-    
-    if (confirmReset) {
-      resetAllData();
-      // 페이지 새로고침
-      window.location.reload();
-    }
-  };
-
   return (
     <div className="fade-in">
       {/* 목업 모드 알림 */}
@@ -326,31 +313,6 @@ export default function Home() {
           }}
         >
           {loading ? '⏳ 생성 중...' : '✨ 새 캘린더 만들기'}
-        </button>
-      </div>
-
-      {/* 데이터 초기화 버튼 (테스트용) */}
-      <div style={{ 
-        textAlign: 'center', 
-        marginBottom: '24px' 
-      }}>
-        <button
-          onClick={handleResetData}
-          style={{
-            padding: '8px 16px',
-            background: '#ff6b6b',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            fontSize: '13px',
-            fontWeight: 'bold',
-            opacity: 0.8
-          }}
-          onMouseEnter={(e) => e.target.style.opacity = '1'}
-          onMouseLeave={(e) => e.target.style.opacity = '0.8'}
-        >
-          🔄 모든 데이터 초기화 (테스트용)
         </button>
       </div>
 
