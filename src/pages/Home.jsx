@@ -4,7 +4,7 @@ import { createCalendar, getCalendar, findCalendarByName, checkCalendarNameExist
 import { saveCalendarLink, getCalendarLinks, generateCalendarLink, generateGuestLink } from '../lib/localStorage';
 import { isFirebaseAvailable } from '../lib/mockStorage';
 import { resetAllData } from '../lib/reset';
-import AdSenseMock from '../components/AdSenseMock';
+import AdSenseController from '../components/AdSenseController';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -613,7 +613,7 @@ export default function Home() {
         </div>
       )}
 
-      <AdSenseMock position="bottom" />
+      <AdSenseController position="bottom" />
 
       {/* 캘린더 생성 모달 */}
       {showCreateModal && (

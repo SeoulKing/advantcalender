@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { saveMessage, getCalendar } from '../lib/firestore';
-import AdSenseMock from '../components/AdSenseMock';
+import AdSenseController from '../components/AdSenseController';
 
 export default function Write() {
   const { calendarId } = useParams();
@@ -481,7 +481,7 @@ export default function Write() {
         )}
       </div>
 
-      <AdSenseMock position="bottom" />
+      <AdSenseController position="bottom" />
     </div>
   );
 }

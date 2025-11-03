@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCalendar } from '../lib/firestore';
 import { generateCalendarLink, generateGuestLink } from '../lib/localStorage';
-import AdSenseMock from '../components/AdSenseMock';
+import AdSenseController from '../components/AdSenseController';
 
 export default function Calendar() {
   const { calendarId } = useParams();
@@ -585,7 +585,7 @@ export default function Calendar() {
         </div>
       </div>
 
-      <AdSenseMock position="bottom" />
+      <AdSenseController position="bottom" />
     </div>
   );
 }

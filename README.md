@@ -116,5 +116,8 @@ GitHub Actions가 `main` 브랜치에 푸시할 때마다 자동으로 Firebase 
 
 배포된 사이트: https://gyulmo-advant-calendar.web.app
 
+## 광고 설정
+Google AdSense 연동 방법은 `ADSENSE_SETUP.md`를 참고하세요.
+
 ---
 **크리스마스 분위기의 따뜻한 메시지를 전달하세요!** 🎁✨

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import AdSenseMock from '../components/AdSenseMock';
+import AdSenseController from '../components/AdSenseController';
 
 export default function NotFound() {
   return (
@@ -30,7 +30,7 @@ export default function NotFound() {
         홈으로 돌아가기
       </Link>
 
-      <AdSenseMock position="bottom" />
+      <AdSenseController position="bottom" />
     </div>
   );
 }
