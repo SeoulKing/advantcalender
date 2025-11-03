@@ -1,0 +1,334 @@
+/* 크리스마스 테마 스타일 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+:root {
+  --christmas-red: #c8102e;
+  --christmas-green: #0d7d4e;
+  --christmas-gold: #ffb600;
+  --christmas-dark-green: #005a2c;
+  --christmas-white: #fff9f0;
+  --christmas-snow: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.15);
+}
+
+* {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #fff9f0 0%, #ffeef5 100%);
+  min-height: 100vh;
+}
+
+/* 눈 내리는 효과 */
+.snowflake {
+  position: fixed;
+  top: -10px;
+  color: white;
+  font-size: 1em;
+  font-family: Arial;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  animation: snowfall linear infinite;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.8;
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(0vh) translateX(0px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(100vh) translateX(100px) rotate(360deg);
+  }
+}
+
+/* 크리스마스 버튼 */
+.christmas-button {
+  background: linear-gradient(135deg, var(--christmas-red), #d32f2f);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(200, 16, 46, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.christmas-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(200, 16, 46, 0.4);
+}
+
+.christmas-button:active {
+  transform: translateY(0);
+}
+
+.christmas-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.christmas-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.christmas-button-green {
+  background: linear-gradient(135deg, var(--christmas-green), var(--christmas-dark-green));
+  box-shadow: 0 4px 15px rgba(13, 125, 78, 0.3);
+}
+
+.christmas-button-green:hover {
+  box-shadow: 0 6px 20px rgba(13, 125, 78, 0.4);
+}
+
+/* 크리스마스 카드 */
+.christmas-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border: 2px solid transparent;
+  background-image: 
+    linear-gradient(white, white),
+    linear-gradient(135deg, var(--christmas-red), var(--christmas-green));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  overflow: hidden;
+  width: 100%;
+}
+
+.christmas-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* 달력 날짜 셀 */
+.calendar-date {
+  background: white;
+  border: 2px solid #e8e8e8;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.calendar-date.unlocked {
+  cursor: pointer;
+}
+
+.calendar-date.unlocked:hover {
+  transform: scale(1.05);
+  border-color: var(--christmas-red);
+  box-shadow: 0 4px 12px rgba(200, 16, 46, 0.2);
+}
+
+.calendar-date.has-message {
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  border-color: var(--christmas-green);
+}
+
+.calendar-date.locked {
+  opacity: 0.5;
+  background: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* 크리스마스 헤더 */
+.christmas-header {
+  background: linear-gradient(135deg, var(--christmas-red), #d32f2f);
+  color: white;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.christmas-header::before {
+  content: '🎄';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2em;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* 메시지 박스 */
+.message-box {
+  background: linear-gradient(135deg, #fff9f0, #ffffff);
+  border-left: 4px solid var(--christmas-red);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(
+    to right,
+    #f6f7f8 0%,
+    #edeef1 20%,
+    #f6f7f8 40%,
+    #f6f7f8 100%
+  );
+  background-size: 1000px 100%;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  /* 전체 폰트 크기 조정 */
+  body {
+    font-size: 14px;
+  }
+  
+  /* 제목 폰트 크기 */
+  h1 {
+    font-size: clamp(24px, 8vw, 36px) !important;
+  }
+  
+  h2 {
+    font-size: clamp(20px, 6vw, 28px) !important;
+  }
+  
+  h3 {
+    font-size: clamp(16px, 5vw, 20px) !important;
+  }
+  
+  /* 일반 텍스트 */
+  p {
+    font-size: clamp(13px, 3vw, 16px) !important;
+  }
+  
+  /* 달력 그리드 - 모바일에서 gap 줄이기 */
+  .calendar-grid {
+    gap: 4px !important;
+  }
+  
+  /* 달력 카드 - 모바일에서 padding 줄이기 */
+  .calendar-card {
+    padding: 12px !important;
+  }
+  
+  /* 요일 헤더 - 모바일에서 작게 */
+  .weekday-header {
+    padding: 6px 2px !important;
+    font-size: 11px !important;
+  }
+  
+  /* 달력 날짜 버튼 - 모바일에서 작게 */
+  .calendar-date-button {
+    font-size: 12px !important;
+    min-height: 36px !important;
+  }
+  
+  /* 크리스마스 버튼 - 모바일에서 작게 */
+  .christmas-button {
+    padding: 10px 16px !important;
+    font-size: 14px !important;
+  }
+  
+  /* 크리스마스 카드 - 모바일에서 padding 줄이기 */
+  .christmas-card {
+    padding: 16px !important;
+  }
+  
+  /* 메시지 박스 - 모바일에서 padding 줄이기 */
+  .message-box {
+    padding: 16px !important;
+  }
+  
+  /* 크리스마스 헤더 - 모바일에서 padding 줄이기 */
+  .christmas-header {
+    padding: 16px !important;
+  }
+  
+  /* 이모티콘 크기 조정 */
+  .emoji-large {
+    font-size: clamp(32px, 15vw, 64px) !important;
+  }
+  
+  .emoji-medium {
+    font-size: clamp(24px, 10vw, 48px) !important;
+  }
+  
+  .emoji-small {
+    font-size: clamp(20px, 8vw, 32px) !important;
+  }
+}
+
+/* 작은 모바일 기기 (480px 이하) */
+@media (max-width: 480px) {
+  /* 더 작은 화면을 위한 추가 최적화 */
+  .calendar-grid {
+    gap: 3px !important;
+  }
+  
+  .calendar-card {
+    padding: 8px !important;
+  }
+  
+  .weekday-header {
+    padding: 4px 2px !important;
+    font-size: 10px !important;
+  }
+  
+  .calendar-date-button {
+    font-size: 11px !important;
+    min-height: 32px !important;
+  }
+  
+  .christmas-card {
+    padding: 12px !important;
+  }
+  
+  .message-box {
+    padding: 12px !important;
+  }
+  
+  .christmas-header {
+    padding: 12px !important;
+  }
+}
+
