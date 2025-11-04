@@ -861,7 +861,7 @@ export default function Calendar() {
               onClick={() => handleCopyLink(generateCalendarLink(calendarId))}
               style={{
                 padding: '12px 20px',
-                background: '#2196F3',
+                background: '#757575',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
