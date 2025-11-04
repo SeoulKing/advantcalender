@@ -112,15 +112,13 @@ export default function Guest() {
     if (submitted) {
       setSubmitted(false);
     }
-    // 날짜 선택 시 제출 섹션으로 스크롤
+    // 날짜 선택 시 제출 섹션으로 스크롤 (중앙 정렬)
     setTimeout(() => {
       const element = document.getElementById('message-section');
       if (element) {
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - 50; // 상단 여백 50px
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
+        element.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
         });
       }
     }, 100);
@@ -155,16 +153,27 @@ export default function Guest() {
     setSaving(true);
     try {
       await saveMessage(calendarId, selectedDate, message.trim());
-      alert('✅ 메시지가 저장되었습니다! 감사합니다! 💝');
       
-      // textarea blur 처리 (키보드가 올라오지 않도록)
-      document.getElementById('message-textarea')?.blur();
+      // textarea blur 처리 (키보드가 올라오지 않도록) - alert 전에 먼저 처리
+      const textarea = document.getElementById('message-textarea');
+      if (textarea) {
+        textarea.blur();
+        // readOnly 속성을 임시로 설정하여 포커스 방지
+        textarea.setAttribute('readonly', 'readonly');
+      }
+      
+      alert('✅ 메시지가 저장되었습니다! 감사합니다! 💝');
       
       // 폼 초기화
       setMessage('');
       setSelectedDate('');
       setShowDateSelector(false);
       setSubmitted(true); // 제출 완료 상태 설정
+      
+      // readOnly 해제
+      if (textarea) {
+        textarea.removeAttribute('readonly');
+      }
       
       // 캘린더 새로고침
       await loadCalendar();
@@ -177,6 +186,10 @@ export default function Guest() {
             behavior: 'smooth', 
             block: 'center' 
           });
+        }
+        // 스크롤 후 한번 더 blur 처리 (모바일에서 확실하게 키보드 숨김)
+        if (textarea) {
+          textarea.blur();
         }
       }, 300);
     } catch (error) {
