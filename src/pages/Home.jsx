@@ -420,8 +420,8 @@ export default function Home() {
             value={findName}
             onChange={(e) => setFindName(e.target.value)}
             style={{
-              flex: 1,
-              minWidth: '150px',
+              flex: '1 1 200px',
+              minWidth: '100%',
               padding: '12px',
               fontSize: '15px',
               border: '2px solid #e0e0e0',
@@ -435,8 +435,8 @@ export default function Home() {
             value={findPassword}
             onChange={(e) => setFindPassword(e.target.value)}
             style={{
-              flex: 1,
-              minWidth: '150px',
+              flex: '1 1 200px',
+              minWidth: '100%',
               padding: '12px',
               fontSize: '15px',
               border: '2px solid #e0e0e0',
@@ -449,6 +449,8 @@ export default function Home() {
             disabled={finding}
             className="christmas-button"
             style={{
+              flex: '1 1 200px',
+              minWidth: '100%',
               padding: '12px 24px',
               fontSize: '16px',
               whiteSpace: 'nowrap'
@@ -635,7 +637,7 @@ export default function Home() {
                 </button>
                 
                 <button
-                  onClick={() => navigate(`/write/${cal.id}`)}
+                  onClick={() => navigate(`/guest/${cal.id}`)}
                   className="christmas-button"
                   style={{
                     width: '100%',

@@ -75,11 +75,10 @@ export default function Guest() {
       return false; // 서비스 범위 밖 날짜는 항상 잠금
     }
     
-    // 12월 1일~25일: 해당 날짜가 되면 열림
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const targetDate = new Date(date + 'T00:00:00');
-    return targetDate <= today;
+    // 12월 1일~25일: 언제든지 메시지 작성 가능
+    const dateObj = new Date(date);
+    const day = dateObj.getDate();
+    return day >= 1 && day <= 25;
   };
 
   const handleDateSelect = (date) => {
@@ -88,9 +87,16 @@ export default function Guest() {
       return;
     }
     setSelectedDate(date);
-    // 날짜 선택 후 메시지 작성 영역으로 스크롤
+    // 날짜 선택 시 메시지 섹션으로 스크롤
     setTimeout(() => {
-      document.getElementById('message-textarea')?.focus();
+      document.getElementById('message-section')?.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+      });
+      // 포커스는 약간 늦게
+      setTimeout(() => {
+        document.getElementById('message-textarea')?.focus();
+      }, 300);
     }, 100);
   };
 
@@ -98,6 +104,12 @@ export default function Guest() {
     e.preventDefault();
     if (!selectedDate || !message.trim()) {
       alert('날짜와 메시지를 모두 입력해주세요.');
+      return;
+    }
+
+    // 날짜 잠금 확인
+    if (!isDateUnlocked(selectedDate)) {
+      alert('🔒 이 날짜는 메시지를 작성할 수 없습니다!');
       return;
     }
 
@@ -500,7 +512,7 @@ export default function Guest() {
                 id="message-textarea"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="여기에 따뜻한 메시지를 작성해주세요...&#10;&#10;예: 크리스마스 즐거운 하루 보내세요! 🎄"
+                placeholder="여기에 따뜻한 메시지를 작성해주세요.&#10;&#10;예: 크리스마스 즐거운 하루 보내세요! 🎄"
                 style={{ 
                   width: '100%', 
                   minHeight: '250px',
@@ -515,6 +527,14 @@ export default function Guest() {
                   overflow: 'auto',
                   transition: 'all 0.3s ease',
                   lineHeight: '1.8'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#c8102e';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(200, 16, 46, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#e0e0e0';
+                  e.target.style.boxShadow = 'none';
                 }}
                 required
               />
@@ -533,11 +553,10 @@ export default function Guest() {
                 disabled={saving || !selectedDate || message.trim().length === 0}
                 className="christmas-button"
                 style={{ 
-                  flex: 1,
+                  width: '100%',
                   padding: '16px', 
                   fontSize: '18px',
-                  fontWeight: 'bold',
-                  minWidth: 0
+                  fontWeight: 'bold'
                 }}
               >
                 {saving ? '⏳ 저장 중...' : '💝 메시지 남기기'}

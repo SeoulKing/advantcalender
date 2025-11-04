@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App';
 import Home from './pages/Home';
 import Calendar from './pages/Calendar';
-import Write from './pages/Write';
 import Guest from './pages/Guest';
 import NotFound from './pages/NotFound';
 import './styles/christmas.css';
@@ -15,7 +14,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path='/' element={<App />}>
           <Route index element={<Home />} />
-          <Route path='write/:calendarId' element={<Write />} />
           <Route path='calendar/:calendarId' element={<Calendar />} />
           <Route path='guest/:calendarId' element={<Guest />} />
           <Route path='*' element={<NotFound />} />

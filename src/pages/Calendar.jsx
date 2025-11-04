@@ -648,7 +648,7 @@ export default function Calendar() {
       {/* 메시지 쓰기 버튼 - 캘린더 아래 */}
       <div style={{ textAlign: 'center', marginTop: '24px' }}>
         <button
-          onClick={() => navigate(`/write/${calendarId}`)}
+          onClick={() => navigate(`/guest/${calendarId}`)}
           className="christmas-button"
           style={{
             padding: '14px 32px',
