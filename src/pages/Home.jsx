@@ -308,7 +308,7 @@ export default function Home() {
             크리스마스를 기다리며
           </h1>
           <p style={{ color: '#666', marginTop: '8px', fontSize: 'clamp(14px, 3vw, 16px)' }}>
-            가족과 친구들에게 메시지를 전달하세요!
+            하루하루 메시지를 읽을 수 있게 가족과 친구들에게 메시지를 전달하세요!
             <br />
             메시지는 잠겨있다가 해당 날짜가 되면 볼 수 있게 됩니다.
           </p>
@@ -619,7 +619,7 @@ export default function Home() {
                   color: '#666',
                   marginBottom: '8px'
                 }}>
-                  내가 받은 메시지를 확인할 수 있는 링크입니다.
+                  내가 받은 메시지를 확인할 수 있는 링크입니다. 이 링크를 따로 저장해서 쉽게 메시지를 확인할 수 있습니다.
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <input

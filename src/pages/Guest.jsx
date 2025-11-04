@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCalendar, saveMessage } from '../lib/firestore';
+import { generateGuestLink } from '../lib/localStorage';
 import AdSenseController from '../components/AdSenseController';
 
 export default function Guest() {
@@ -60,6 +61,19 @@ export default function Guest() {
     return Array.isArray(messages) ? messages.length : 0;
   };
 
+  const isDateLockedOutsideService = (date) => {
+    // 서비스 범위 밖 날짜: 11월 30일, 12월 26일~30일
+    const lockedDates = [
+      '2025-11-30',  // 11월 30일
+      '2025-12-26',  // 12월 26일
+      '2025-12-27',  // 12월 27일
+      '2025-12-28',  // 12월 28일
+      '2025-12-29',  // 12월 29일
+      '2025-12-30',  // 12월 30일
+    ];
+    return lockedDates.includes(date);
+  };
+
   const isDateUnlocked = (date) => {
     // 서비스 범위 밖 날짜: 11월 30일, 12월 26일~30일
     const lockedDates = [
@@ -82,6 +96,12 @@ export default function Guest() {
   };
 
   const handleDateSelect = (date) => {
+    // 서비스 범위 밖 날짜는 클릭 불가
+    if (isDateLockedOutsideService(date)) {
+      alert('🚫 이 날짜는 서비스 범위 밖 날짜입니다.\n\n12월 1일부터 25일까지만 메시지를 작성할 수 있습니다.');
+      return;
+    }
+    
     if (!isDateUnlocked(date)) {
       alert('🔒 아직 이 날짜의 메시지를 작성할 수 없습니다!');
       return;
@@ -104,6 +124,12 @@ export default function Guest() {
     e.preventDefault();
     if (!selectedDate || !message.trim()) {
       alert('날짜와 메시지를 모두 입력해주세요.');
+      return;
+    }
+
+    // 서비스 범위 밖 날짜 확인
+    if (isDateLockedOutsideService(selectedDate)) {
+      alert('🚫 이 날짜는 서비스 범위 밖 날짜입니다.\n\n12월 1일부터 25일까지만 메시지를 작성할 수 있습니다.');
       return;
     }
 
@@ -137,6 +163,11 @@ export default function Guest() {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleCopyLink = (link) => {
+    navigator.clipboard.writeText(link);
+    alert('✅ 링크가 복사되었습니다!');
   };
 
   // 크리스마스까지 남은 일수 계산
@@ -635,6 +666,72 @@ export default function Guest() {
         >
           만들러 가기 →
         </button>
+      </div>
+
+      {/* 이 캘린더 공유하기 섹션 */}
+      <div className="christmas-card fade-in" style={{
+        marginTop: '32px',
+        padding: '24px'
+      }}>
+        <h3 style={{
+          margin: 0,
+          marginBottom: '24px',
+          fontSize: 'clamp(18px, 4vw, 22px)',
+          fontWeight: 'bold',
+          color: '#333'
+        }}>
+          📤 이 캘린더 공유하기
+        </h3>
+
+        <div style={{ marginBottom: '20px' }}>
+          <div style={{ 
+            fontSize: '14px', 
+            color: '#c8102e', 
+            marginBottom: '10px',
+            fontWeight: 'bold'
+          }}>
+            💌 게스트 링크 (이 링크를 공유하세요!)
+          </div>
+          <div style={{
+            fontSize: '12px',
+            color: '#666',
+            marginBottom: '8px'
+          }}>
+            가족과 친구들에게 이 링크를 공유하면 메시지를 작성할 수 있습니다.
+          </div>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <input
+              type='text'
+              value={generateGuestLink(calendarId)}
+              readOnly
+              style={{
+                flex: 1,
+                padding: '12px',
+                fontSize: '13px',
+                border: '2px solid #c8102e',
+                borderRadius: '8px',
+                background: '#fff',
+                fontWeight: '500'
+              }}
+            />
+            <button
+              onClick={() => handleCopyLink(generateGuestLink(calendarId))}
+              style={{
+                padding: '12px 20px',
+                background: '#c8102e',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              복사
+            </button>
+          </div>
+        </div>
       </div>
 
       <AdSenseController position="bottom" />

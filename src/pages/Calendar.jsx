@@ -515,7 +515,43 @@ export default function Calendar() {
               </button>
             </div>
             
-            {isFutureDate ? (
+            {isLockedOutside ? (
+              // 서비스 범위 밖 날짜 안내
+              <div style={{
+                textAlign: 'center',
+                padding: '40px 20px',
+                background: 'linear-gradient(135deg, #f5f5f5, #e8e8e8)',
+                borderRadius: '12px',
+                border: '2px solid #999'
+              }}>
+                <div style={{ fontSize: '64px', marginBottom: '20px' }}>🚫</div>
+                <p style={{ 
+                  color: '#333', 
+                  fontSize: '20px', 
+                  marginBottom: '12px', 
+                  fontWeight: 'bold' 
+                }}>
+                  서비스 범위 밖 날짜입니다
+                </p>
+                <p style={{ 
+                  color: '#666', 
+                  fontSize: '16px',
+                  marginBottom: '8px',
+                  lineHeight: '1.6'
+                }}>
+                  이 날짜는 어드벤트 캘린더 서비스에서<br />
+                  사용할 수 없는 날짜입니다.
+                </p>
+                <p style={{ 
+                  color: '#999', 
+                  fontSize: '14px',
+                  marginTop: '16px'
+                }}>
+                  💝 12월 1일부터 25일까지만<br />
+                  메시지를 작성하고 확인할 수 있습니다!
+                </p>
+              </div>
+            ) : isFutureDate ? (
               // 잠긴 날짜 안내
               <div style={{
                 textAlign: 'center',
