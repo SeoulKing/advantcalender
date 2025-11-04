@@ -240,13 +240,15 @@ export default function Guest() {
       <div style={{ textAlign: 'center', marginBottom: 'clamp(24px, 6vw, 40px)' }}>
         {calendar?.calendarName && (
           <div style={{
-            fontSize: 'clamp(20px, 6vw, 28px)',
-            color: '#c8102e',
+            fontSize: 'clamp(32px, 8vw, 48px)',
+            background: 'linear-gradient(135deg, #c8102e, #0d7d4e)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
             fontWeight: 'bold',
             marginBottom: '16px',
             textAlign: 'left'
           }}>
-            {calendar.calendarName}
+            To. {calendar.calendarName}
           </div>
         )}
         <div style={{ fontSize: 'clamp(40px, 15vw, 64px)', marginBottom: '16px' }}>💌</div>
@@ -470,43 +472,44 @@ export default function Guest() {
           boxSizing: 'border-box',
           width: '100%'
         }}>
-          <div style={{ marginBottom: '24px' }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: '12px', 
-              fontWeight: 'bold',
-              fontSize: 'clamp(18px, 4vw, 22px)',
-              color: '#333'
-            }}>
-              ✍️ 메시지 작성
-            </label>
-            <div style={{ 
-              marginBottom: '16px',
-              padding: '16px',
-              background: 'linear-gradient(135deg, #ffeef5, #fff)',
-              borderRadius: '12px',
-              border: '2px solid #c8102e'
-            }}>
-              <div style={{ 
-                fontSize: '14px', 
-                color: '#666', 
-                marginBottom: '8px' 
-              }}>
-                선택한 날짜
-              </div>
-              <div style={{ 
-                fontSize: '20px', 
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: '24px' }}>
+              <label style={{ 
+                display: 'block', 
+                marginBottom: '12px', 
                 fontWeight: 'bold',
-                color: '#c8102e'
+                fontSize: 'clamp(18px, 4vw, 22px)',
+                color: '#333'
               }}>
-                {new Date(selectedDate).toLocaleDateString('ko-KR', { 
-                  month: 'long', 
-                  day: 'numeric',
-                  weekday: 'long'
-                })}
+                ✍️ 메시지 작성
+              </label>
+              <div style={{ 
+                marginBottom: '16px',
+                padding: '16px',
+                background: 'linear-gradient(135deg, #ffeef5, #fff)',
+                borderRadius: '12px',
+                border: '2px solid #c8102e'
+              }}>
+                <div style={{ 
+                  fontSize: '14px', 
+                  color: '#666', 
+                  marginBottom: '8px' 
+                }}>
+                  선택한 날짜
+                </div>
+                <div style={{ 
+                  fontSize: '20px', 
+                  fontWeight: 'bold',
+                  color: '#c8102e'
+                }}>
+                  {new Date(selectedDate).toLocaleDateString('ko-KR', { 
+                    month: 'long', 
+                    day: 'numeric',
+                    weekday: 'long'
+                  })}
+                </div>
               </div>
-            </div>
-            <textarea
+              <textarea
               id="message-textarea"
               value={message}
               onChange={(e) => {
@@ -546,25 +549,11 @@ export default function Guest() {
               marginTop: '8px',
               fontSize: '13px',
               color: '#666',
-              marginBottom: '16px'
+              marginBottom: '24px'
             }}>
               {message.length}자
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* 3단계: 제출 섹션 (메시지 작성 후 표시) */}
-      {message.trim() && selectedDate && (
-        <div className="christmas-card fade-in" style={{ 
-          padding: '32px', 
-          overflow: 'hidden', 
-          boxSizing: 'border-box', 
-          width: '100%',
-          marginBottom: '32px'
-        }}>
-          <form onSubmit={handleSubmit}>
-            <div style={{ display: 'flex', gap: '12px', width: '100%', boxSizing: 'border-box' }}>
+            {message.trim() && (
               <button
                 type='submit'
                 disabled={saving || !selectedDate || message.trim().length === 0}
@@ -578,7 +567,8 @@ export default function Guest() {
               >
                 {saving ? '⏳ 저장 중...' : '💝 메시지 남기기'}
               </button>
-            </div>
+            )}
+          </div>
           </form>
         </div>
       )}
