@@ -329,7 +329,7 @@ export default function Calendar() {
                     ? '2px solid #c8102e'
                     : isChristmas 
                       ? '2px solid #ffb600' 
-                      : today 
+                      : (today && !isLockedOutside)
                         ? '2px solid #ffb600' 
                         : '1.5px solid #e0e0e0',
                   borderRadius: '8px',
@@ -358,7 +358,7 @@ export default function Calendar() {
                     ? '0 0 0 2px rgba(200, 16, 46, 0.2)'
                     : isChristmas 
                       ? '0 0 0 2px rgba(255, 182, 0, 0.3), 0 2px 6px rgba(255, 182, 0, 0.2)' 
-                      : today 
+                      : (today && !isLockedOutside)
                         ? '0 0 0 1px rgba(255, 182, 0, 0.3)' 
                         : 'none',
                   transform: isSelected 
@@ -399,7 +399,7 @@ export default function Calendar() {
                     </div>
                   </>
                 )}
-                {today && !isChristmas && !isFutureDate && (
+                {today && !isChristmas && !isFutureDate && !isLockedOutside && (
                   <div style={{
                     position: 'absolute',
                     top: '4px',
@@ -415,7 +415,7 @@ export default function Calendar() {
                     ? '#c8102e'
                     : isChristmas 
                       ? '#ffb600' 
-                      : today 
+                      : (today && !isLockedOutside)
                         ? '#ffb600' 
                         : '#333',
                   fontWeight: isChristmas ? 'bold' : 'bold',

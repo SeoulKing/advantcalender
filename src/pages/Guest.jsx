@@ -345,7 +345,8 @@ export default function Guest() {
             const day = dateObj.getDate();
             const messageCount = getMessageCount(date);
             const isSelected = selectedDate === date;
-            const today = new Date().toISOString().split('T')[0] === date;
+            const isLockedOutside = isDateLockedOutsideService(date);
+            const isToday = today === date;
             const isChristmas = day === 25;
             const unlocked = isDateUnlocked(date);
             
@@ -363,7 +364,7 @@ export default function Guest() {
                     ? '2px solid #c8102e' 
                     : isChristmas
                       ? '2px solid #ffb600'
-                      : today 
+                      : (isToday && !isLockedOutside)
                         ? '2px solid #ffb600'
                         : '1.5px solid #e0e0e0',
                   borderRadius: '8px',
@@ -412,7 +413,7 @@ export default function Guest() {
                     </div>
                   </>
                 )}
-                {today && !isSelected && !isChristmas && (
+                {isToday && !isSelected && !isChristmas && !isLockedOutside && (
                   <div style={{
                     position: 'absolute',
                     top: '2px',
@@ -428,7 +429,7 @@ export default function Guest() {
                     ? '#c8102e' 
                     : isChristmas
                       ? '#ffb600'
-                      : today 
+                      : (isToday && !isLockedOutside)
                         ? '#ffb600' 
                         : '#333',
                   fontWeight: isChristmas ? 'bold' : 'bold',
