@@ -12,7 +12,6 @@ export default function Guest() {
   const [message, setMessage] = useState('');
   const [saving, setSaving] = useState(false);
   const [calendarLoading, setCalendarLoading] = useState(true);
-  const [showDateSelector, setShowDateSelector] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
@@ -112,7 +111,7 @@ export default function Guest() {
     if (submitted) {
       setSubmitted(false);
     }
-    // 날짜 선택 시 제출 섹션으로 스크롤 (중앙 정렬)
+    // 날짜 선택 시 메시지 섹션으로 스크롤 (중앙 정렬)
     setTimeout(() => {
       const element = document.getElementById('message-section');
       if (element) {
@@ -167,7 +166,6 @@ export default function Guest() {
       // 폼 초기화
       setMessage('');
       setSelectedDate('');
-      setShowDateSelector(false);
       setSubmitted(true); // 제출 완료 상태 설정
       
       // readOnly 해제
@@ -270,128 +268,13 @@ export default function Guest() {
           margin: 0
         }}>
           따뜻한 메시지를 남겨주세요! 💝<br />
-          메시지를 작성하고 날짜를 선택하면 <br/>
+          날짜를 선택하고 메시지를 작성하면 <br/>
           상대가 그 날짜에 메시지를 확인할 수 있습니다.
         </p>
       </div>
 
-      {/* 1단계: 메시지 입력 섹션 (항상 보임) */}
-      <div className="christmas-card fade-in" style={{ 
-        marginBottom: '32px', 
-        padding: '32px',
-        overflow: 'hidden',
-        boxSizing: 'border-box',
-        width: '100%'
-      }}>
-        <div style={{ marginBottom: '24px' }}>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: '12px', 
-            fontWeight: 'bold',
-            fontSize: 'clamp(18px, 4vw, 22px)',
-            color: '#333'
-          }}>
-            ✍️ 메시지 작성
-          </label>
-          <p style={{
-            fontSize: '14px',
-            color: '#666',
-            marginTop: '-8px',
-            marginBottom: '16px',
-            lineHeight: '1.6'
-          }}>
-            먼저 전하고 싶은 메시지를 작성해주세요. 메시지를 작성하면 날짜를 선택할 수 있습니다.
-          </p>
-                      <textarea
-            id="message-textarea"
-            value={message}
-            onChange={(e) => {
-              setMessage(e.target.value);
-              // 메시지 입력 시작 시 제출 완료 상태 해제
-              if (submitted) {
-                setSubmitted(false);
-              }
-              // 메시지가 완전히 삭제되면 날짜 선택 섹션도 숨김
-              if (!e.target.value.trim()) {
-                setShowDateSelector(false);
-                setSelectedDate('');
-              }
-            }}
-            placeholder="여기에 따뜻한 메시지를 작성해주세요.&#10;&#10;예: 크리스마스 즐거운 하루 보내세요! 🎄"
-            style={{ 
-              width: '100%', 
-              minHeight: '200px',
-              maxWidth: '100%',
-              padding: '18px', 
-              borderRadius: '12px', 
-              border: '2px solid #e0e0e0',
-              fontSize: '16px',
-              fontFamily: 'inherit',
-              boxSizing: 'border-box',
-              resize: 'vertical',
-              overflow: 'auto',
-              transition: 'all 0.3s ease',
-              lineHeight: '1.8'
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = '#c8102e';
-              e.target.style.boxShadow = '0 0 0 3px rgba(200, 16, 46, 0.1)';
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = '#e0e0e0';
-              e.target.style.boxShadow = 'none';
-            }}
-            autoFocus={!submitted}
-          />
-          <div style={{ 
-            marginTop: '8px',
-            fontSize: '13px',
-            color: '#666',
-            marginBottom: '16px'
-          }}>
-            {message.length}자
-          </div>
-          {!showDateSelector && (
-            <button
-              type="button"
-              onClick={() => {
-                if (!message.trim()) {
-                  alert('먼저 메시지를 작성해주세요.');
-                  document.getElementById('message-textarea')?.focus();
-                  return;
-                }
-                setShowDateSelector(true);
-                setTimeout(() => {
-                  const element = document.getElementById('date-selector-section');
-                  if (element) {
-                    const elementPosition = element.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - 50; // 상단 여백 50px
-                    window.scrollTo({
-                      top: offsetPosition,
-                      behavior: 'smooth'
-                    });
-                  }
-                }, 100);
-              }}
-              className="christmas-button"
-              style={{
-                width: '100%',
-                padding: '14px',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                marginTop: '8px',
-                opacity: message.trim() ? 1 : 0.6
-              }}
-            >
-              📅 날짜 선택하기
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* 2단계: 날짜 선택 섹션 (날짜 선택하기 버튼 클릭 시 표시) */}
-      {showDateSelector && (
-        <div id="date-selector-section" className="christmas-card calendar-card fade-in" style={{ marginBottom: '32px', padding: '16px' }}>
+      {/* 1단계: 날짜 선택 섹션 (항상 보임) */}
+      <div id="date-selector-section" className="christmas-card calendar-card fade-in" style={{ marginBottom: '32px', padding: '16px' }}>
         <div style={{
           marginBottom: '12px',
           fontSize: '14px',
@@ -415,7 +298,7 @@ export default function Guest() {
           marginBottom: '20px',
           lineHeight: '1.6'
         }}>
-          메시지를 보낼 날짜를 선택해주세요.
+          메시지를 보낼 날짜를 먼저 선택해주세요.
         </p>
         <div className="calendar-grid" style={{
           display: 'grid',
@@ -577,44 +460,109 @@ export default function Guest() {
           })}
         </div>
       </div>
+
+      {/* 2단계: 메시지 입력 섹션 (날짜 선택 후 표시) */}
+      {selectedDate && (
+        <div id="message-section" className="christmas-card fade-in" style={{ 
+          marginBottom: '32px', 
+          padding: '32px',
+          overflow: 'hidden',
+          boxSizing: 'border-box',
+          width: '100%'
+        }}>
+          <div style={{ marginBottom: '24px' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '12px', 
+              fontWeight: 'bold',
+              fontSize: 'clamp(18px, 4vw, 22px)',
+              color: '#333'
+            }}>
+              ✍️ 메시지 작성
+            </label>
+            <div style={{ 
+              marginBottom: '16px',
+              padding: '16px',
+              background: 'linear-gradient(135deg, #ffeef5, #fff)',
+              borderRadius: '12px',
+              border: '2px solid #c8102e'
+            }}>
+              <div style={{ 
+                fontSize: '14px', 
+                color: '#666', 
+                marginBottom: '8px' 
+              }}>
+                선택한 날짜
+              </div>
+              <div style={{ 
+                fontSize: '20px', 
+                fontWeight: 'bold',
+                color: '#c8102e'
+              }}>
+                {new Date(selectedDate).toLocaleDateString('ko-KR', { 
+                  month: 'long', 
+                  day: 'numeric',
+                  weekday: 'long'
+                })}
+              </div>
+            </div>
+            <textarea
+              id="message-textarea"
+              value={message}
+              onChange={(e) => {
+                setMessage(e.target.value);
+                // 메시지 입력 시작 시 제출 완료 상태 해제
+                if (submitted) {
+                  setSubmitted(false);
+                }
+              }}
+              placeholder="여기에 따뜻한 메시지를 작성해주세요.&#10;&#10;예: 크리스마스 즐거운 하루 보내세요! 🎄"
+              style={{ 
+                width: '100%', 
+                minHeight: '200px',
+                maxWidth: '100%',
+                padding: '18px', 
+                borderRadius: '12px', 
+                border: '2px solid #e0e0e0',
+                fontSize: '16px',
+                fontFamily: 'inherit',
+                boxSizing: 'border-box',
+                resize: 'vertical',
+                overflow: 'auto',
+                transition: 'all 0.3s ease',
+                lineHeight: '1.8'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#c8102e';
+                e.target.style.boxShadow = '0 0 0 3px rgba(200, 16, 46, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#e0e0e0';
+                e.target.style.boxShadow = 'none';
+              }}
+              autoFocus={!submitted}
+            />
+            <div style={{ 
+              marginTop: '8px',
+              fontSize: '13px',
+              color: '#666',
+              marginBottom: '16px'
+            }}>
+              {message.length}자
+            </div>
+          </div>
+        </div>
       )}
 
-      {/* 3단계: 날짜 선택 후 제출 섹션 */}
+      {/* 3단계: 제출 섹션 (메시지 작성 후 표시) */}
       {message.trim() && selectedDate && (
-        <div id="message-section" className="christmas-card fade-in" style={{ 
+        <div className="christmas-card fade-in" style={{ 
           padding: '32px', 
           overflow: 'hidden', 
           boxSizing: 'border-box', 
           width: '100%',
           marginBottom: '32px'
         }}>
-          <div style={{ 
-            marginBottom: '24px',
-            padding: '20px',
-            background: 'linear-gradient(135deg, #ffeef5, #fff)',
-            borderRadius: '12px',
-            border: '2px solid #c8102e'
-          }}>
-            <div style={{ 
-              fontSize: '14px', 
-              color: '#666', 
-              marginBottom: '8px' 
-            }}>
-              선택한 날짜
-            </div>
-            <div style={{ 
-              fontSize: '24px', 
-              fontWeight: 'bold',
-              color: '#c8102e'
-            }}>
-              {new Date(selectedDate).toLocaleDateString('ko-KR', { 
-                month: 'long', 
-                day: 'numeric',
-                weekday: 'long'
-              })}
-            </div>
-          </div>
-
           <form onSubmit={handleSubmit}>
             <div style={{ display: 'flex', gap: '12px', width: '100%', boxSizing: 'border-box' }}>
               <button
