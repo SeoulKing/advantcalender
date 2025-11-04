@@ -24,10 +24,22 @@ export default function Home() {
   const [findPassword, setFindPassword] = useState('');
   const [finding, setFinding] = useState(false);
   const [daysUntilChristmas, setDaysUntilChristmas] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
     loadMyCalendars();
     setIsMockMode(!isFirebaseAvailable());
+  }, []);
+
+  // 화면 크기 감지
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    handleResize(); // 초기 설정
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // 크리스마스까지 남은 일수 계산
@@ -573,19 +585,23 @@ export default function Home() {
                 }}>
                   가족과 친구들에게 이 링크를 공유하면 메시지를 작성할 수 있습니다.
                 </div>
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexDirection: isMobile ? 'column' : 'row' }}>
                   <input
                     type='text'
                     value={generateGuestLink(cal.id)}
                     readOnly
                     style={{
                       flex: 1,
+                      minWidth: 0,
                       padding: '12px',
-                      fontSize: '13px',
+                      fontSize: 'clamp(11px, 3vw, 13px)',
                       border: '2px solid #c8102e',
                       borderRadius: '8px',
                       background: '#fff',
-                      fontWeight: '500'
+                      fontWeight: '500',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap'
                     }}
                   />
                   <button
@@ -599,7 +615,9 @@ export default function Home() {
                       cursor: 'pointer',
                       fontSize: '14px',
                       fontWeight: 'bold',
-                      whiteSpace: 'nowrap'
+                      whiteSpace: 'nowrap',
+                      flexShrink: 0,
+                      width: isMobile ? '100%' : 'auto'
                     }}
                   >
                     복사
@@ -621,18 +639,22 @@ export default function Home() {
                 }}>
                   내가 받은 메시지를 확인할 수 있는 링크입니다. 이 링크를 따로 저장해서 쉽게 메시지를 확인할 수 있습니다.
                 </div>
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div style={{ display: 'flex', gap: '8px', flexDirection: isMobile ? 'column' : 'row' }}>
                   <input
                     type='text'
                     value={generateCalendarLink(cal.id)}
                     readOnly
                     style={{
                       flex: 1,
+                      minWidth: 0,
                       padding: '12px',
-                      fontSize: '13px',
+                      fontSize: 'clamp(11px, 3vw, 13px)',
                       border: '2px solid #e0e0e0',
                       borderRadius: '8px',
-                      background: '#f9f9f9'
+                      background: '#f9f9f9',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap'
                     }}
                   />
                   <button
@@ -646,7 +668,9 @@ export default function Home() {
                       cursor: 'pointer',
                       fontSize: '14px',
                       fontWeight: 'bold',
-                      whiteSpace: 'nowrap'
+                      whiteSpace: 'nowrap',
+                      flexShrink: 0,
+                      width: isMobile ? '100%' : 'auto'
                     }}
                   >
                     복사
