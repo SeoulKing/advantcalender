@@ -10,21 +10,27 @@ export function saveCalendarLink(calendarId, title = null) {
   const existingIndex = links.findIndex(link => link.id === calendarId);
   
   if (existingIndex >= 0) {
-    // 이미 있는 캘린더면 title 업데이트
+    // 이미 있는 캘린더면 배열에서 제거
+    const existingCalendar = links.splice(existingIndex, 1)[0];
+    
+    // title 업데이트
     if (title) {
-      links[existingIndex].title = title;
+      existingCalendar.title = title;
     }
-    // title이 없어도 업데이트 시간 갱신
-    links[existingIndex].updatedAt = new Date().toISOString();
+    // updatedAt 갱신
+    existingCalendar.updatedAt = new Date().toISOString();
+    
+    // 맨 앞에 추가 (최신순으로 표시되도록)
+    links.unshift(existingCalendar);
     localStorage.setItem(CALENDAR_LINKS_KEY, JSON.stringify(links));
   } else {
-    // 새로운 캘린더 추가
-    links.push({
+    // 새로운 캘린더 추가 (맨 앞에)
+    const newCalendar = {
       id: calendarId,
       title: title || `캘린더 ${calendarId.slice(0, 8)}`,
       createdAt: new Date().toISOString()
-    });
-    
+    };
+    links.unshift(newCalendar);
     localStorage.setItem(CALENDAR_LINKS_KEY, JSON.stringify(links));
   }
 }
