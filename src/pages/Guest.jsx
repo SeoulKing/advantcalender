@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getCalendar, saveMessage } from '../lib/firestore';
 import AdSenseController from '../components/AdSenseController';
 
 export default function Guest() {
   const { calendarId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [calendar, setCalendar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState('');
@@ -17,6 +18,11 @@ export default function Guest() {
   useEffect(() => {
     loadCalendar();
   }, [calendarId]);
+
+  // 페이지 로드 시 최상단으로 스크롤
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   const loadCalendar = async () => {
     try {
