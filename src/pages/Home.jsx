@@ -585,7 +585,7 @@ export default function Home() {
                 }}>
                   가족과 친구들에게 이 링크를 공유하면 메시지를 작성할 수 있습니다.
                 </div>
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexDirection: isMobile ? 'column' : 'row' }}>
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexDirection: 'row', alignItems: 'center' }}>
                   <input
                     type='text'
                     value={generateGuestLink(cal.id)}
@@ -593,6 +593,7 @@ export default function Home() {
                     style={{
                       flex: 1,
                       minWidth: 0,
+                      maxWidth: '100%',
                       padding: '12px',
                       fontSize: 'clamp(11px, 3vw, 13px)',
                       border: '2px solid #c8102e',
@@ -601,7 +602,8 @@ export default function Home() {
                       fontWeight: '500',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap'
+                      whiteSpace: 'nowrap',
+                      boxSizing: 'border-box'
                     }}
                   />
                   <button
@@ -617,7 +619,7 @@ export default function Home() {
                       fontWeight: 'bold',
                       whiteSpace: 'nowrap',
                       flexShrink: 0,
-                      width: isMobile ? '100%' : 'auto'
+                      boxSizing: 'border-box'
                     }}
                   >
                     복사
@@ -639,7 +641,7 @@ export default function Home() {
                 }}>
                   내가 받은 메시지를 확인할 수 있는 링크입니다. 이 링크를 따로 저장해서 쉽게 메시지를 확인할 수 있습니다.
                 </div>
-                <div style={{ display: 'flex', gap: '8px', flexDirection: isMobile ? 'column' : 'row' }}>
+                <div style={{ display: 'flex', gap: '8px', flexDirection: 'row', alignItems: 'center' }}>
                   <input
                     type='text'
                     value={generateCalendarLink(cal.id)}
@@ -647,6 +649,7 @@ export default function Home() {
                     style={{
                       flex: 1,
                       minWidth: 0,
+                      maxWidth: '100%',
                       padding: '12px',
                       fontSize: 'clamp(11px, 3vw, 13px)',
                       border: '2px solid #e0e0e0',
@@ -654,7 +657,8 @@ export default function Home() {
                       background: '#f9f9f9',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap'
+                      whiteSpace: 'nowrap',
+                      boxSizing: 'border-box'
                     }}
                   />
                   <button
@@ -670,7 +674,7 @@ export default function Home() {
                       fontWeight: 'bold',
                       whiteSpace: 'nowrap',
                       flexShrink: 0,
-                      width: isMobile ? '100%' : 'auto'
+                      boxSizing: 'border-box'
                     }}
                   >
                     복사

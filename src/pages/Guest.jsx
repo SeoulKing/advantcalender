@@ -700,7 +700,7 @@ export default function Guest() {
           }}>
             가족과 친구들에게 이 링크를 공유하면 메시지를 작성할 수 있습니다.
           </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '8px', flexDirection: 'row', alignItems: 'center' }}>
             <input
               type='text'
               value={generateGuestLink(calendarId)}
@@ -708,11 +708,17 @@ export default function Guest() {
               style={{
                 flex: 1,
                 padding: '12px',
-                fontSize: '13px',
+                fontSize: 'clamp(13px, 3vw, 14px)',
                 border: '2px solid #c8102e',
                 borderRadius: '8px',
                 background: '#fff',
-                fontWeight: '500'
+                fontWeight: '500',
+                minWidth: 0,
+                maxWidth: '100%',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                boxSizing: 'border-box'
               }}
             />
             <button
@@ -724,9 +730,11 @@ export default function Guest() {
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
-                fontSize: '14px',
+                fontSize: 'clamp(14px, 3vw, 16px)',
                 fontWeight: 'bold',
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+                boxSizing: 'border-box'
               }}
             >
               복사

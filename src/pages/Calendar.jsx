@@ -712,19 +712,25 @@ export default function Calendar() {
           }}>
             가족과 친구들에게 이 링크를 공유하면 메시지를 작성할 수 있습니다.
           </div>
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexDirection: 'row', alignItems: 'center' }}>
             <input
               type='text'
               value={generateGuestLink(calendarId)}
               readOnly
               style={{
                 flex: 1,
+                minWidth: 0,
+                maxWidth: '100%',
                 padding: '12px',
-                fontSize: '13px',
+                fontSize: 'clamp(11px, 3vw, 13px)',
                 border: '2px solid #c8102e',
                 borderRadius: '8px',
                 background: '#fff',
-                fontWeight: '500'
+                fontWeight: '500',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                boxSizing: 'border-box'
               }}
             />
             <button
@@ -738,7 +744,9 @@ export default function Calendar() {
                 cursor: 'pointer',
                 fontSize: '14px',
                 fontWeight: 'bold',
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+                boxSizing: 'border-box'
               }}
             >
               복사
@@ -760,18 +768,24 @@ export default function Calendar() {
           }}>
             내가 받은 메시지를 확인할 수 있는 링크입니다.
           </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '8px', flexDirection: 'row', alignItems: 'center' }}>
             <input
               type='text'
               value={generateCalendarLink(calendarId)}
               readOnly
               style={{
                 flex: 1,
+                minWidth: 0,
+                maxWidth: '100%',
                 padding: '12px',
-                fontSize: '13px',
+                fontSize: 'clamp(11px, 3vw, 13px)',
                 border: '2px solid #e0e0e0',
                 borderRadius: '8px',
-                background: '#f9f9f9'
+                background: '#f9f9f9',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                boxSizing: 'border-box'
               }}
             />
             <button
@@ -785,7 +799,9 @@ export default function Calendar() {
                 cursor: 'pointer',
                 fontSize: '14px',
                 fontWeight: 'bold',
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+                boxSizing: 'border-box'
               }}
             >
               복사
