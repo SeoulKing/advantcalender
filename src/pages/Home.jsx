@@ -23,10 +23,29 @@ export default function Home() {
   const [findName, setFindName] = useState('');
   const [findPassword, setFindPassword] = useState('');
   const [finding, setFinding] = useState(false);
+  const [daysUntilChristmas, setDaysUntilChristmas] = useState(0);
 
   useEffect(() => {
     loadMyCalendars();
     setIsMockMode(!isFirebaseAvailable());
+  }, []);
+
+  // 크리스마스까지 남은 일수 계산
+  useEffect(() => {
+    const calculateDaysUntilChristmas = () => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const christmas = new Date(2025, 11, 25); // 2025년 12월 25일
+      christmas.setHours(0, 0, 0, 0);
+      const diffTime = christmas - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      setDaysUntilChristmas(Math.max(0, diffDays));
+    };
+    
+    calculateDaysUntilChristmas();
+    // 매일 자정에 업데이트
+    const interval = setInterval(calculateDaysUntilChristmas, 1000 * 60 * 60); // 1시간마다 체크
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -198,10 +217,21 @@ export default function Home() {
       const calendar = await findCalendarByName(trimmedName, findPassword);
       
       if (calendar && calendar.id) {
-        // 캘린더 찾기 성공
-        saveCalendarLink(calendar.id, calendar.calendarName || trimmedName);
+        // 캘린더 찾기 성공 - 캘린더 이름 우선순위: calendar.calendarName > trimmedName
+        const calendarTitle = calendar.calendarName || trimmedName;
+        console.log('✅ 캘린더 찾기 성공:', {
+          id: calendar.id,
+          calendarName: calendar.calendarName,
+          trimmedName: trimmedName,
+          finalTitle: calendarTitle
+        });
         
-        console.log('✅ 캘린더 찾기 성공:', calendar.id);
+        // localStorage에 저장 (이름 업데이트 포함)
+        saveCalendarLink(calendar.id, calendarTitle);
+        
+        // 즉시 홈 화면 업데이트를 위해 캘린더 목록 다시 로드
+        loadMyCalendars();
+        
         alert('✅ 캘린더를 찾았습니다!');
         
         // 폼 초기화
@@ -209,8 +239,10 @@ export default function Home() {
         setFindPassword('');
         setShowFindModal(false);
         
-        loadMyCalendars();
-        navigate(`/calendar/${calendar.id}`);
+        // 홈에서 확인할 수 있도록 잠시 대기 후 캘린더 페이지로 이동
+        setTimeout(() => {
+          navigate(`/calendar/${calendar.id}`);
+        }, 100);
       } else {
         console.warn('❌ 캘린더를 찾을 수 없음 - 결과:', calendar);
         alert('❌ 캘린더를 찾을 수 없습니다.\n\n확인사항:\n1. 이름이 정확한지 확인해주세요\n2. 비밀번호가 정확한지 확인해주세요\n3. 브라우저 콘솔(F12)에서 자세한 정보를 확인할 수 있습니다.');
@@ -271,7 +303,51 @@ export default function Home() {
           </h1>
           <p style={{ color: '#666', marginTop: '8px', fontSize: 'clamp(14px, 3vw, 16px)' }}>
             가족과 친구들에게 메시지를 전달하세요!
+            <br />
+            메시지는 잠겨있다가 해당 날짜가 되면 볼 수 있게 됩니다.
           </p>
+        </div>
+      </div>
+
+      {/* 크리스마스 카운트다운 */}
+      <div className="christmas-card" style={{
+        marginBottom: '24px',
+        padding: 'clamp(20px, 5vw, 28px)',
+        textAlign: 'center',
+        background: 'linear-gradient(135deg, #fff5f5, #fff9f0)',
+        border: '2px solid #c8102e',
+        borderRadius: '16px'
+      }}>
+        <div style={{
+          fontSize: 'clamp(32px, 8vw, 48px)',
+          marginBottom: '12px'
+        }}>
+          🎄
+        </div>
+        <div style={{
+          fontSize: 'clamp(14px, 3vw, 16px)',
+          color: '#666',
+          marginBottom: '8px',
+          fontWeight: '500'
+        }}>
+          크리스마스까지
+        </div>
+        <div style={{
+          fontSize: 'clamp(36px, 10vw, 56px)',
+          fontWeight: 'bold',
+          background: 'linear-gradient(135deg, #c8102e, #0d7d4e)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          marginBottom: '4px',
+          lineHeight: '1.2'
+        }}>
+          {daysUntilChristmas}일
+        </div>
+        <div style={{
+          fontSize: 'clamp(12px, 2.5vw, 14px)',
+          color: '#999'
+        }}>
+          {daysUntilChristmas === 0 ? '🎉 오늘은 크리스마스입니다! 🎉' : '남았습니다!'}
         </div>
       </div>
 

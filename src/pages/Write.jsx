@@ -11,10 +11,29 @@ export default function Write() {
   const [loading, setLoading] = useState(false);
   const [calendar, setCalendar] = useState(null);
   const [calendarLoading, setCalendarLoading] = useState(true);
+  const [daysUntilChristmas, setDaysUntilChristmas] = useState(0);
 
   useEffect(() => {
     loadCalendar();
   }, [calendarId]);
+
+  // 크리스마스까지 남은 일수 계산
+  useEffect(() => {
+    const calculateDaysUntilChristmas = () => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const christmas = new Date(2025, 11, 25); // 2025년 12월 25일
+      christmas.setHours(0, 0, 0, 0);
+      const diffTime = christmas - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      setDaysUntilChristmas(Math.max(0, diffDays));
+    };
+    
+    calculateDaysUntilChristmas();
+    // 매일 자정에 업데이트
+    const interval = setInterval(calculateDaysUntilChristmas, 1000 * 60 * 60); // 1시간마다 체크
+    return () => clearInterval(interval);
+  }, []);
 
   const loadCalendar = async () => {
     try {
@@ -51,7 +70,33 @@ export default function Write() {
     return Array.isArray(messages) ? messages.length : 0;
   };
 
+  const isDateUnlocked = (date) => {
+    // 서비스 범위 밖 날짜: 11월 30일, 12월 26일~30일
+    const lockedDates = [
+      '2025-11-30',  // 11월 30일
+      '2025-12-26',  // 12월 26일
+      '2025-12-27',  // 12월 27일
+      '2025-12-28',  // 12월 28일
+      '2025-12-29',  // 12월 29일
+      '2025-12-30',  // 12월 30일
+    ];
+    
+    if (lockedDates.includes(date)) {
+      return false; // 서비스 범위 밖 날짜는 항상 잠금
+    }
+    
+    // 12월 1일~25일: 해당 날짜가 되면 열림
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const targetDate = new Date(date + 'T00:00:00');
+    return targetDate <= today;
+  };
+
   const handleDateSelect = (date) => {
+    if (!isDateUnlocked(date)) {
+      alert('🔒 이 날짜는 메시지를 작성할 수 없습니다!');
+      return;
+    }
     setSelectedDate(date);
     // 날짜 선택 시 스크롤
     setTimeout(() => {
@@ -69,6 +114,12 @@ export default function Write() {
       return;
     }
 
+    // 날짜 잠금 확인
+    if (!isDateUnlocked(selectedDate)) {
+      alert('🔒 이 날짜는 메시지를 작성할 수 없습니다!');
+      return;
+    }
+    
     // 12월이 아닌 날짜 선택 방지
     const dateObj = new Date(selectedDate);
     if (dateObj.getMonth() !== 11 || dateObj.getFullYear() !== 2025) {
@@ -128,8 +179,58 @@ export default function Write() {
         </p>
       </div>
 
+      {/* 크리스마스 카운트다운 */}
+      <div className="christmas-card" style={{
+        marginBottom: '24px',
+        padding: 'clamp(20px, 5vw, 28px)',
+        textAlign: 'center',
+        background: 'linear-gradient(135deg, #fff5f5, #fff9f0)',
+        border: '2px solid #c8102e',
+        borderRadius: '16px'
+      }}>
+        <div style={{
+          fontSize: 'clamp(32px, 8vw, 48px)',
+          marginBottom: '12px'
+        }}>
+          🎄
+        </div>
+        <div style={{
+          fontSize: 'clamp(14px, 3vw, 16px)',
+          color: '#666',
+          marginBottom: '8px',
+          fontWeight: '500'
+        }}>
+          크리스마스까지
+        </div>
+        <div style={{
+          fontSize: 'clamp(36px, 10vw, 56px)',
+          fontWeight: 'bold',
+          background: 'linear-gradient(135deg, #c8102e, #0d7d4e)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          marginBottom: '4px',
+          lineHeight: '1.2'
+        }}>
+          {daysUntilChristmas}일
+        </div>
+        <div style={{
+          fontSize: 'clamp(12px, 2.5vw, 14px)',
+          color: '#999'
+        }}>
+          {daysUntilChristmas === 0 ? '🎉 오늘은 크리스마스입니다! 🎉' : '남았습니다!'}
+        </div>
+      </div>
+
       {/* 달력 섹션 */}
       <div className="christmas-card calendar-card" style={{ marginBottom: '32px', padding: '16px' }}>
+        <div style={{
+          marginBottom: '12px',
+          fontSize: '14px',
+          color: '#666',
+          fontWeight: '500'
+        }}>
+          12월
+        </div>
         <h2 style={{
           marginTop: 0,
           marginBottom: '20px',
@@ -137,7 +238,7 @@ export default function Write() {
           fontWeight: 'bold',
           color: '#333'
         }}>
-          📅 날짜 선택 (12월)
+          📅 날짜 선택
         </h2>
         <div className="calendar-grid" style={{
           display: 'grid',
@@ -187,6 +288,7 @@ export default function Write() {
             const isSelected = selectedDate === date;
             const today = new Date().toISOString().split('T')[0] === date;
             const isChristmas = day === 25; // 크리스마스 특별 처리
+            const unlocked = isDateUnlocked(date);
             
             return (
               <button
@@ -194,6 +296,7 @@ export default function Write() {
                 type="button"
                 className="calendar-date-button"
                 onClick={() => handleDateSelect(date)}
+                disabled={!unlocked}
                 style={{
                   aspectRatio: '1',
                   minHeight: '45px',
@@ -212,7 +315,7 @@ export default function Write() {
                       : messageCount > 0
                         ? 'linear-gradient(135deg, #e8f5e9, #c8e6c9)'
                         : '#ffffff',
-                  cursor: 'pointer',
+                  cursor: unlocked ? 'pointer' : 'not-allowed',
                   fontSize: '13px',
                   fontWeight: 'bold',
                   position: 'relative',
@@ -221,6 +324,7 @@ export default function Write() {
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  opacity: unlocked ? 1 : 0.5,
                   boxShadow: isSelected 
                     ? '0 0 0 2px rgba(200, 16, 46, 0.2)' 
                     : isChristmas
@@ -229,7 +333,7 @@ export default function Write() {
                   transform: isChristmas ? 'scale(1.03)' : 'scale(1)'
                 }}
                 onMouseEnter={(e) => {
-                  if (!isSelected) {
+                  if (!isSelected && unlocked) {
                     e.target.style.transform = isChristmas ? 'scale(1.1)' : 'scale(1.05)';
                     e.target.style.boxShadow = isChristmas
                       ? '0 0 0 3px rgba(255, 182, 0, 0.4), 0 6px 16px rgba(255, 182, 0, 0.3)'
@@ -247,6 +351,15 @@ export default function Write() {
                   }
                 }}
               >
+                {!unlocked && (
+                  <div style={{
+                    fontSize: '10px',
+                    marginTop: '2px',
+                    opacity: 0.6
+                  }}>
+                    🔒
+                  </div>
+                )}
                 {isChristmas && (
                   <>
                     <div style={{
@@ -479,6 +592,61 @@ export default function Write() {
             </p>
           </div>
         )}
+      </div>
+
+      {/* 내 캘린더 만들기 박스 */}
+      <div 
+        className="christmas-card"
+        style={{
+          marginTop: '32px',
+          padding: 'clamp(32px, 8vw, 48px) clamp(24px, 6vw, 40px)',
+          textAlign: 'center',
+          background: 'linear-gradient(135deg, #fff5f5, #fff)',
+          border: '3px solid #c8102e',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.borderWidth = '4px';
+          e.currentTarget.style.boxShadow = '0 0 0 4px rgba(200, 16, 46, 0.15), 0 8px 24px rgba(200, 16, 46, 0.2)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.borderWidth = '3px';
+          e.currentTarget.style.boxShadow = 'none';
+        }}
+      >
+        <div style={{ fontSize: 'clamp(48px, 12vw, 64px)', marginBottom: '16px' }}>✨</div>
+        <h2 style={{
+          margin: 0,
+          fontSize: 'clamp(20px, 5vw, 28px)',
+          background: 'linear-gradient(135deg, #c8102e, #0d7d4e)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          fontWeight: 'bold',
+          marginBottom: '12px'
+        }}>
+          내 캘린더 만들기
+        </h2>
+        <p style={{
+          color: '#666',
+          fontSize: 'clamp(14px, 3vw, 16px)',
+          margin: 0,
+          marginBottom: '24px'
+        }}>
+          나만의 어드벤트 캘린더를 만들어보세요! 💝
+        </p>
+        <button
+          onClick={() => navigate('/')}
+          className="christmas-button"
+          style={{
+            padding: 'clamp(14px, 3vw, 18px) clamp(32px, 8vw, 48px)',
+            fontSize: 'clamp(16px, 4vw, 20px)',
+            fontWeight: 'bold',
+            minWidth: 'clamp(200px, 50vw, 280px)',
+            cursor: 'pointer'
+          }}
+        >
+          만들러 가기 →
+        </button>
       </div>
 
       <AdSenseController position="bottom" />

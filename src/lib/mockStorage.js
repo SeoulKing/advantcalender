@@ -44,7 +44,6 @@ export function mockCreateCalendar(calendarName = null, password = null) {
   calendars[calendarId] = calendarData;
   localStorage.setItem(CALENDARS_STORAGE_KEY, JSON.stringify(calendars));
   
-  console.log('📦 [목업 모드] 캘린더 생성:', calendarId);
   return calendarId;
 }
 
@@ -53,15 +52,14 @@ export function mockCreateCalendar(calendarName = null, password = null) {
  */
 export function mockCheckCalendarNameExists(calendarName) {
   const calendars = mockGetAllCalendars();
+  const trimmedName = calendarName.trim();
   
-  for (const [calendarId, calendar] of Object.entries(calendars)) {
-    if (calendar.calendarName === calendarName) {
-      console.log('📦 [목업] 이름 중복 발견:', calendarName);
-      return true;
+  for (const calendar of Object.values(calendars)) {
+    if ((calendar.calendarName || '').trim() === trimmedName) {
+      return true; // 중복됨
     }
   }
   
-  console.log('📦 [목업] 이름 사용 가능:', calendarName);
   return false;
 }
 
@@ -70,7 +68,6 @@ export function mockCheckCalendarNameExists(calendarName) {
  */
 export function mockFindCalendarByName(calendarName, password) {
   if (!calendarName || !password) {
-    console.warn('📦 [목업 찾기] 이름 또는 비밀번호가 없음:', { calendarName, password });
     return null;
   }
   
@@ -78,40 +75,16 @@ export function mockFindCalendarByName(calendarName, password) {
   const passwordHash = simpleHash(password);
   const trimmedName = calendarName.trim();
   
-  console.log('📦 [목업 찾기] 입력:', { 
-    calendarName: trimmedName, 
-    password: '***',
-    passwordHash 
-  });
-  console.log('📦 [목업 찾기] 저장된 캘린더들:', Object.keys(calendars).length, '개');
-  
-  // 디버깅: 모든 캘린더 정보 로그
   for (const [calendarId, calendar] of Object.entries(calendars)) {
     const storedName = calendar.calendarName || '';
     const storedHash = calendar.passwordHash || '';
     const nameMatch = storedName.trim() === trimmedName;
     const hashMatch = storedHash === passwordHash;
     
-    console.log('📦 [목업 찾기] 캘린더:', {
-      id: calendarId,
-      name: storedName,
-      storedHash: storedHash,
-      hasPasswordHash: !!storedHash,
-      inputHash: passwordHash,
-      matchesName: nameMatch,
-      matchesHash: hashMatch
-    });
-    
     if (nameMatch && hashMatch) {
-      console.log('✅ [목업 찾기] 캘린더 찾음!', calendarId);
       return { id: calendarId, ...calendar };
     }
   }
-  
-  console.log('❌ [목업 찾기] 캘린더를 찾을 수 없음');
-  console.log('📦 [목업 찾기] 가능한 문제:');
-  console.log('   - 이름 불일치:', trimmedName);
-  console.log('   - 해시 불일치:', passwordHash);
   
   return null;
 }
@@ -161,7 +134,6 @@ export function mockSaveMessage(calendarId, date, message) {
   calendars[calendarId] = calendar;
   localStorage.setItem(CALENDARS_STORAGE_KEY, JSON.stringify(calendars));
   
-  console.log('📦 [목업 모드] 메시지 저장:', { calendarId, date, message });
   return true;
 }
 

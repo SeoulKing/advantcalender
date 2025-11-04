@@ -158,17 +158,6 @@ body {
   position: relative;
 }
 
-.christmas-header::before {
-  content: '🎄';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2em;
-  opacity: 0.2;
-  pointer-events: none;
-}
-
 /* 메시지 박스 */
 .message-box {
   background: linear-gradient(135deg, #fff9f0, #ffffff);

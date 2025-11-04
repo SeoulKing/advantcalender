@@ -14,7 +14,15 @@ export default function App() {
         marginBottom: '0',
         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <div style={{ 
+          maxWidth: '1200px', 
+          margin: '0 auto', 
+          position: 'relative', 
+          zIndex: 1,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
           <Link 
             to='/' 
             style={{ 
@@ -28,6 +36,28 @@ export default function App() {
             }}
           >
             <span>디지털 어드벤트 캘린더</span>
+          </Link>
+          <Link 
+            to='/' 
+            style={{ 
+              textDecoration: 'none',
+              fontSize: 'clamp(24px, 5vw, 32px)',
+              display: 'flex',
+              alignItems: 'center',
+              cursor: 'pointer',
+              transition: 'transform 0.2s ease',
+              padding: '4px 8px',
+              borderRadius: '8px'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
+            title="홈으로 가기"
+          >
+            🏠
           </Link>
         </div>
       </nav>

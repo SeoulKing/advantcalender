@@ -6,8 +6,19 @@ const CALENDAR_LINKS_KEY = 'advent_calendar_links';
 export function saveCalendarLink(calendarId, title = null) {
   const links = getCalendarLinks();
   
-  // 중복 체크
-  if (!links.find(link => link.id === calendarId)) {
+  // 기존 캘린더 찾기
+  const existingIndex = links.findIndex(link => link.id === calendarId);
+  
+  if (existingIndex >= 0) {
+    // 이미 있는 캘린더면 title 업데이트
+    if (title) {
+      links[existingIndex].title = title;
+    }
+    // title이 없어도 업데이트 시간 갱신
+    links[existingIndex].updatedAt = new Date().toISOString();
+    localStorage.setItem(CALENDAR_LINKS_KEY, JSON.stringify(links));
+  } else {
+    // 새로운 캘린더 추가
     links.push({
       id: calendarId,
       title: title || `캘린더 ${calendarId.slice(0, 8)}`,
