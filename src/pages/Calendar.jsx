@@ -216,42 +216,35 @@ export default function Calendar() {
       {/* 크리스마스 카운트다운 */}
       <div className="christmas-card" style={{
         marginBottom: '24px',
-        padding: 'clamp(20px, 5vw, 28px)',
+        padding: 'clamp(10px, 2.5vw, 16px)',
         textAlign: 'center',
         background: 'linear-gradient(135deg, #fff5f5, #fff9f0)',
         border: '2px solid #c8102e',
         borderRadius: '16px'
       }}>
         <div style={{
-          fontSize: 'clamp(32px, 8vw, 48px)',
-          marginBottom: '12px'
-        }}>
-          🎄
-        </div>
-        <div style={{
-          fontSize: 'clamp(14px, 3vw, 16px)',
+          fontSize: 'clamp(14px, 3.5vw, 18px)',
           color: '#666',
-          marginBottom: '8px',
-          fontWeight: '500'
+          fontWeight: '500',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          flexWrap: 'wrap'
         }}>
-          크리스마스까지
-        </div>
-        <div style={{
-          fontSize: 'clamp(36px, 10vw, 56px)',
-          fontWeight: 'bold',
-          background: 'linear-gradient(135deg, #c8102e, #0d7d4e)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          marginBottom: '4px',
-          lineHeight: '1.2'
-        }}>
-          {daysUntilChristmas}일
-        </div>
-        <div style={{
-          fontSize: 'clamp(12px, 2.5vw, 14px)',
-          color: '#999'
-        }}>
-          {daysUntilChristmas === 0 ? '🎉 오늘은 크리스마스입니다! 🎉' : '남았습니다!'}
+          <span>🎄</span>
+          <span>크리스마스까지</span>
+          <span style={{
+            fontWeight: 'bold',
+            background: 'linear-gradient(135deg, #c8102e, #0d7d4e)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+          }}>
+            {daysUntilChristmas}일
+          </span>
+          <span style={{ color: '#999' }}>
+            {daysUntilChristmas === 0 ? '🎉 오늘은 크리스마스입니다! 🎉' : '남았습니다!'}
+          </span>
         </div>
       </div>
 
