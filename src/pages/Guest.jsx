@@ -160,6 +160,14 @@ export default function Guest() {
       
       // 캘린더 새로고침
       await loadCalendar();
+      
+      // "나도 캘린더 만들기" 섹션으로 스크롤
+      setTimeout(() => {
+        document.getElementById('create-calendar-section')?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+      }, 300);
     } catch (error) {
       alert('메시지 저장에 실패했습니다.');
       console.error(error);
@@ -330,10 +338,15 @@ export default function Guest() {
                 }
                 setShowDateSelector(true);
                 setTimeout(() => {
-                  document.getElementById('date-selector-section')?.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'start' 
-                  });
+                  const element = document.getElementById('date-selector-section');
+                  if (element) {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - 100; // 상단 여백 100px
+                    window.scrollTo({
+                      top: offsetPosition,
+                      behavior: 'smooth'
+                    });
+                  }
                 }, 100);
               }}
               className="christmas-button"
@@ -602,6 +615,7 @@ export default function Guest() {
       {submitted && !message.trim() && !selectedDate && (
         <>
           <div 
+            id="create-calendar-section"
             className="christmas-card"
             style={{
               marginTop: '32px',
