@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCalendar, saveMessage } from '../lib/firestore';
-import { generateGuestLink } from '../lib/localStorage';
 import AdSenseController from '../components/AdSenseController';
 
 export default function Guest() {
@@ -13,6 +12,8 @@ export default function Guest() {
   const [message, setMessage] = useState('');
   const [saving, setSaving] = useState(false);
   const [calendarLoading, setCalendarLoading] = useState(true);
+  const [showDateSelector, setShowDateSelector] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     loadCalendar();
@@ -107,16 +108,16 @@ export default function Guest() {
       return;
     }
     setSelectedDate(date);
-    // 날짜 선택 시 메시지 섹션으로 스크롤
+    // 날짜 선택 시 제출 완료 상태 해제
+    if (submitted) {
+      setSubmitted(false);
+    }
+    // 날짜 선택 시 제출 섹션으로 스크롤
     setTimeout(() => {
       document.getElementById('message-section')?.scrollIntoView({ 
         behavior: 'smooth', 
         block: 'start' 
       });
-      // 포커스는 약간 늦게
-      setTimeout(() => {
-        document.getElementById('message-textarea')?.focus();
-      }, 300);
     }, 100);
   };
 
@@ -154,6 +155,8 @@ export default function Guest() {
       // 폼 초기화
       setMessage('');
       setSelectedDate('');
+      setShowDateSelector(false);
+      setSubmitted(true); // 제출 완료 상태 설정
       
       // 캘린더 새로고침
       await loadCalendar();
@@ -163,11 +166,6 @@ export default function Guest() {
     } finally {
       setSaving(false);
     }
-  };
-
-  const handleCopyLink = (link) => {
-    navigator.clipboard.writeText(link);
-    alert('✅ 링크가 복사되었습니다!');
   };
 
   // 크리스마스까지 남은 일수 계산
@@ -239,54 +237,124 @@ export default function Guest() {
           lineHeight: '1.6',
           margin: 0
         }}>
-          따뜻한 메시지를 남겨주세요! 💝
+          따뜻한 메시지를 남겨주세요! 💝<br />
+          메시지를 작성하고 날짜를 선택하면 <br/>
+          상대가 그 날짜에 메시지를 확인할 수 있습니다.
         </p>
       </div>
 
-      {/* 크리스마스 카운트다운 */}
-      <div className="christmas-card" style={{
-        marginBottom: '24px',
-        padding: 'clamp(20px, 5vw, 28px)',
-        textAlign: 'center',
-        background: 'linear-gradient(135deg, #fff5f5, #fff9f0)',
-        border: '2px solid #c8102e',
-        borderRadius: '16px'
+      {/* 1단계: 메시지 입력 섹션 (항상 보임) */}
+      <div className="christmas-card fade-in" style={{ 
+        marginBottom: '32px', 
+        padding: '32px',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+        width: '100%'
       }}>
-        <div style={{
-          fontSize: 'clamp(32px, 8vw, 48px)',
-          marginBottom: '12px'
-        }}>
-          🎄
-        </div>
-        <div style={{
-          fontSize: 'clamp(14px, 3vw, 16px)',
-          color: '#666',
-          marginBottom: '8px',
-          fontWeight: '500'
-        }}>
-          크리스마스까지
-        </div>
-        <div style={{
-          fontSize: 'clamp(36px, 10vw, 56px)',
-          fontWeight: 'bold',
-          background: 'linear-gradient(135deg, #c8102e, #0d7d4e)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          marginBottom: '4px',
-          lineHeight: '1.2'
-        }}>
-          {daysUntilChristmas}일
-        </div>
-        <div style={{
-          fontSize: 'clamp(12px, 2.5vw, 14px)',
-          color: '#999'
-        }}>
-          {daysUntilChristmas === 0 ? '🎉 오늘은 크리스마스입니다! 🎉' : '남았습니다!'}
+        <div style={{ marginBottom: '24px' }}>
+          <label style={{ 
+            display: 'block', 
+            marginBottom: '12px', 
+            fontWeight: 'bold',
+            fontSize: 'clamp(18px, 4vw, 22px)',
+            color: '#333'
+          }}>
+            ✍️ 메시지 작성
+          </label>
+          <p style={{
+            fontSize: '14px',
+            color: '#666',
+            marginTop: '-8px',
+            marginBottom: '16px',
+            lineHeight: '1.6'
+          }}>
+            먼저 전하고 싶은 메시지를 작성해주세요. 메시지를 작성하면 날짜를 선택할 수 있습니다.
+          </p>
+                      <textarea
+            id="message-textarea"
+            value={message}
+            onChange={(e) => {
+              setMessage(e.target.value);
+              // 메시지 입력 시작 시 제출 완료 상태 해제
+              if (submitted) {
+                setSubmitted(false);
+              }
+              // 메시지가 완전히 삭제되면 날짜 선택 섹션도 숨김
+              if (!e.target.value.trim()) {
+                setShowDateSelector(false);
+                setSelectedDate('');
+              }
+            }}
+            placeholder="여기에 따뜻한 메시지를 작성해주세요.&#10;&#10;예: 크리스마스 즐거운 하루 보내세요! 🎄"
+            style={{ 
+              width: '100%', 
+              minHeight: '200px',
+              maxWidth: '100%',
+              padding: '18px', 
+              borderRadius: '12px', 
+              border: '2px solid #e0e0e0',
+              fontSize: '16px',
+              fontFamily: 'inherit',
+              boxSizing: 'border-box',
+              resize: 'vertical',
+              overflow: 'auto',
+              transition: 'all 0.3s ease',
+              lineHeight: '1.8'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#c8102e';
+              e.target.style.boxShadow = '0 0 0 3px rgba(200, 16, 46, 0.1)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#e0e0e0';
+              e.target.style.boxShadow = 'none';
+            }}
+            autoFocus
+          />
+          <div style={{ 
+            marginTop: '8px',
+            fontSize: '13px',
+            color: '#666',
+            marginBottom: '16px'
+          }}>
+            {message.length}자
+          </div>
+          {!showDateSelector && (
+            <button
+              type="button"
+              onClick={() => {
+                if (!message.trim()) {
+                  alert('먼저 메시지를 작성해주세요.');
+                  document.getElementById('message-textarea')?.focus();
+                  return;
+                }
+                setShowDateSelector(true);
+                setTimeout(() => {
+                  document.getElementById('date-selector-section')?.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                  });
+                }, 100);
+              }}
+              className="christmas-button"
+              style={{
+                width: '100%',
+                padding: '14px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                marginTop: '8px',
+                opacity: message.trim() ? 1 : 0.6
+              }}
+            >
+              📅 날짜 선택하기
+            </button>
+          )}
         </div>
       </div>
 
-      {/* 달력 섹션 */}
-      <div className="christmas-card calendar-card" style={{ marginBottom: '32px', padding: '16px' }}>
+      {/* 2단계: 날짜 선택 섹션 (날짜 선택하기 버튼 클릭 시 표시) */}
+      {showDateSelector && (
+        <div id="date-selector-section" className="christmas-card calendar-card fade-in" style={{ marginBottom: '32px', padding: '16px' }}>
         <div style={{
           marginBottom: '12px',
           fontSize: '14px',
@@ -297,13 +365,21 @@ export default function Guest() {
         </div>
         <h2 style={{
           marginTop: 0,
-          marginBottom: '20px',
+          marginBottom: '12px',
           fontSize: '18px',
           fontWeight: 'bold',
           color: '#333'
         }}>
           📅 날짜 선택
         </h2>
+        <p style={{
+          fontSize: '14px',
+          color: '#666',
+          marginBottom: '20px',
+          lineHeight: '1.6'
+        }}>
+          메시지를 보낼 날짜를 선택해주세요.
+        </p>
         <div className="calendar-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(7, 1fr)',
@@ -394,24 +470,15 @@ export default function Guest() {
                 }}
               >
                 {isChristmas && (
-                  <>
-                    <div style={{
-                      position: 'absolute',
-                      top: '1px',
-                      left: '1px',
-                      fontSize: '11px'
-                    }}>
-                      🎄
-                    </div>
-                    <div style={{
-                      position: 'absolute',
-                      top: '1px',
-                      right: '1px',
-                      fontSize: '10px'
-                    }}>
-                      ⭐
-                    </div>
-                  </>
+                  <div style={{
+                    position: 'absolute',
+                    top: '2px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    fontSize: '11px'
+                  }}>
+                    🎄
+                  </div>
                 )}
                 {isToday && !isSelected && !isChristmas && !isLockedOutside && (
                   <div style={{
@@ -433,20 +500,11 @@ export default function Guest() {
                         ? '#ffb600' 
                         : '#333',
                   fontWeight: isChristmas ? 'bold' : 'bold',
-                  lineHeight: '1'
+                  lineHeight: '1',
+                  marginTop: isChristmas ? '8px' : '0'
                 }}>
                   {day}
                 </div>
-                {isChristmas && (
-                  <div style={{
-                    fontSize: '8px',
-                    marginTop: '1px',
-                    color: '#ffb600',
-                    fontWeight: 'bold'
-                  }}>
-                    🎁
-                  </div>
-                )}
                 {messageCount > 0 && !isChristmas && (
                   <div style={{
                     fontSize: '9px',
@@ -482,13 +540,20 @@ export default function Guest() {
           })}
         </div>
       </div>
+      )}
 
-      {/* 메시지 작성 섹션 */}
-      {selectedDate && (
-        <div id="message-section" className="christmas-card" style={{ padding: '32px', overflow: 'hidden', boxSizing: 'border-box', width: '100%' }}>
+      {/* 3단계: 날짜 선택 후 제출 섹션 */}
+      {message.trim() && selectedDate && (
+        <div id="message-section" className="christmas-card fade-in" style={{ 
+          padding: '32px', 
+          overflow: 'hidden', 
+          boxSizing: 'border-box', 
+          width: '100%',
+          marginBottom: '32px'
+        }}>
           <div style={{ 
             marginBottom: '24px',
-            padding: '16px',
+            padding: '20px',
             background: 'linear-gradient(135deg, #ffeef5, #fff)',
             borderRadius: '12px',
             border: '2px solid #c8102e'
@@ -511,74 +576,9 @@ export default function Guest() {
                 weekday: 'long'
               })}
             </div>
-            <button
-              type="button"
-              onClick={() => setSelectedDate('')}
-              style={{
-                marginTop: '12px',
-                padding: '6px 12px',
-                background: '#757575',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '12px'
-              }}
-            >
-              날짜 다시 선택
-            </button>
           </div>
 
           <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: '24px' }}>
-              <label style={{ 
-                display: 'block', 
-                marginBottom: '12px', 
-                fontWeight: 'bold',
-                fontSize: '18px',
-                color: '#333'
-              }}>
-                ✍️ 메시지 작성
-              </label>
-              <textarea
-                id="message-textarea"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="여기에 따뜻한 메시지를 작성해주세요.&#10;&#10;예: 크리스마스 즐거운 하루 보내세요! 🎄"
-                style={{ 
-                  width: '100%', 
-                  minHeight: '250px',
-                  maxWidth: '100%',
-                  padding: '18px', 
-                  borderRadius: '12px', 
-                  border: '2px solid #e0e0e0',
-                  fontSize: '16px',
-                  fontFamily: 'inherit',
-                  boxSizing: 'border-box',
-                  resize: 'vertical',
-                  overflow: 'auto',
-                  transition: 'all 0.3s ease',
-                  lineHeight: '1.8'
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#c8102e';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(200, 16, 46, 0.1)';
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#e0e0e0';
-                  e.target.style.boxShadow = 'none';
-                }}
-                required
-              />
-              <div style={{ 
-                marginTop: '8px',
-                fontSize: '13px',
-                color: '#666'
-              }}>
-                {message.length}자
-              </div>
-            </div>
-
             <div style={{ display: 'flex', gap: '12px', width: '100%', boxSizing: 'border-box' }}>
               <button
                 type='submit'
@@ -586,7 +586,7 @@ export default function Guest() {
                 className="christmas-button"
                 style={{ 
                   width: '100%',
-                  padding: '16px', 
+                  padding: '18px', 
                   fontSize: '18px',
                   fontWeight: 'bold'
                 }}
@@ -598,150 +598,107 @@ export default function Guest() {
         </div>
       )}
 
-      {!selectedDate && (
-        <div className="christmas-card" style={{
-          textAlign: 'center',
-          padding: '60px 20px',
-          color: '#666'
-        }}>
-          <div style={{ fontSize: '64px', marginBottom: '20px' }}>👆</div>
-          <p style={{ fontSize: '18px', marginBottom: '8px', fontWeight: 'bold' }}>
-            날짜를 선택해주세요
-          </p>
-          <p style={{ fontSize: '14px', color: '#999' }}>
-            위의 달력에서 메시지를 작성할 날짜를 선택해주세요
-          </p>
-        </div>
-      )}
-
-      {/* 내 캘린더 만들기 박스 */}
-      <div 
-        className="christmas-card"
-        style={{
-          marginTop: '32px',
-          padding: 'clamp(32px, 8vw, 48px) clamp(24px, 6vw, 40px)',
-          textAlign: 'center',
-          background: 'linear-gradient(135deg, #fff5f5, #fff)',
-          border: '3px solid #c8102e',
-          transition: 'all 0.3s ease'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.borderWidth = '4px';
-          e.currentTarget.style.boxShadow = '0 0 0 4px rgba(200, 16, 46, 0.15), 0 8px 24px rgba(200, 16, 46, 0.2)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.borderWidth = '3px';
-          e.currentTarget.style.boxShadow = 'none';
-        }}
-      >
-        <div style={{ fontSize: 'clamp(48px, 12vw, 64px)', marginBottom: '16px' }}>✨</div>
-        <h2 style={{
-          margin: 0,
-          fontSize: 'clamp(20px, 5vw, 28px)',
-          background: 'linear-gradient(135deg, #c8102e, #0d7d4e)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          fontWeight: 'bold',
-          marginBottom: '12px'
-        }}>
-          내 캘린더 만들기
-        </h2>
-        <p style={{
-          color: '#666',
-          fontSize: 'clamp(14px, 3vw, 16px)',
-          margin: 0,
-          marginBottom: '24px'
-        }}>
-          나만의 어드벤트 캘린더를 만들어보세요! 💝
-        </p>
-        <button
-          onClick={() => navigate('/')}
-          className="christmas-button"
-          style={{
-            padding: 'clamp(14px, 3vw, 18px) clamp(32px, 8vw, 48px)',
-            fontSize: 'clamp(16px, 4vw, 20px)',
-            fontWeight: 'bold',
-            minWidth: 'clamp(200px, 50vw, 280px)',
-            cursor: 'pointer'
-          }}
-        >
-          만들러 가기 →
-        </button>
-      </div>
-
-      {/* 이 캘린더 공유하기 섹션 */}
-      <div className="christmas-card fade-in" style={{
-        marginTop: '32px',
-        padding: '24px'
-      }}>
-        <h3 style={{
-          margin: 0,
-          marginBottom: '24px',
-          fontSize: 'clamp(18px, 4vw, 22px)',
-          fontWeight: 'bold',
-          color: '#333'
-        }}>
-          📤 이 캘린더 공유하기
-        </h3>
-
-        <div style={{ marginBottom: '20px' }}>
-          <div style={{ 
-            fontSize: '14px', 
-            color: '#c8102e', 
-            marginBottom: '10px',
-            fontWeight: 'bold'
-          }}>
-            💌 게스트 링크 (이 링크를 공유하세요!)
-          </div>
-          <div style={{
-            fontSize: '12px',
-            color: '#666',
-            marginBottom: '8px'
-          }}>
-            가족과 친구들에게 이 링크를 공유하면 메시지를 작성할 수 있습니다.
-          </div>
-          <div style={{ display: 'flex', gap: '8px', flexDirection: 'row', alignItems: 'center' }}>
-            <input
-              type='text'
-              value={generateGuestLink(calendarId)}
-              readOnly
-              style={{
-                flex: 1,
-                padding: '12px',
-                fontSize: 'clamp(13px, 3vw, 14px)',
-                border: '2px solid #c8102e',
-                borderRadius: '8px',
-                background: '#fff',
-                fontWeight: '500',
-                minWidth: 0,
-                maxWidth: '100%',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                boxSizing: 'border-box'
-              }}
-            />
+      {/* 내 캘린더 만들기 박스 (제출 완료 후에만 표시) */}
+      {submitted && !message.trim() && !selectedDate && (
+        <>
+          <div 
+            className="christmas-card"
+            style={{
+              marginTop: '32px',
+              padding: 'clamp(32px, 8vw, 48px) clamp(24px, 6vw, 40px)',
+              textAlign: 'center',
+              background: 'linear-gradient(135deg, #fff5f5, #fff)',
+              border: '3px solid #c8102e',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderWidth = '4px';
+              e.currentTarget.style.boxShadow = '0 0 0 4px rgba(200, 16, 46, 0.15), 0 8px 24px rgba(200, 16, 46, 0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderWidth = '3px';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            <div style={{ fontSize: 'clamp(48px, 12vw, 64px)', marginBottom: '16px' }}>✨</div>
+            <h2 style={{
+              margin: 0,
+              fontSize: 'clamp(20px, 5vw, 28px)',
+              background: 'linear-gradient(135deg, #c8102e, #0d7d4e)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              fontWeight: 'bold',
+              marginBottom: '12px'
+            }}>
+              나도 캘린더 만들기
+            </h2>
+            <p style={{
+              color: '#666',
+              fontSize: 'clamp(14px, 3vw, 16px)',
+              margin: 0,
+              marginBottom: '24px'
+            }}>
+              나만의 어드벤트 캘린더를 만들어보세요! 💝
+            </p>
             <button
-              onClick={() => handleCopyLink(generateGuestLink(calendarId))}
+              onClick={() => navigate('/?scroll=true')}
+              className="christmas-button"
               style={{
-                padding: '12px 20px',
-                background: '#c8102e',
-                color: 'white',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontSize: 'clamp(14px, 3vw, 16px)',
+                padding: 'clamp(14px, 3vw, 18px) clamp(32px, 8vw, 48px)',
+                fontSize: 'clamp(16px, 4vw, 20px)',
                 fontWeight: 'bold',
-                whiteSpace: 'nowrap',
-                flexShrink: 0,
-                boxSizing: 'border-box'
+                minWidth: 'clamp(200px, 50vw, 280px)',
+                cursor: 'pointer'
               }}
             >
-              복사
+              만들러 가기 →
             </button>
           </div>
-        </div>
-      </div>
+
+          {/* 크리스마스 카운트다운 */}
+          <div className="christmas-card" style={{
+            marginTop: '32px',
+            marginBottom: '24px',
+            padding: 'clamp(20px, 5vw, 28px)',
+            textAlign: 'center',
+            background: 'linear-gradient(135deg, #fff5f5, #fff9f0)',
+            border: '2px solid #c8102e',
+            borderRadius: '16px'
+          }}>
+            <div style={{
+              fontSize: 'clamp(32px, 8vw, 48px)',
+              marginBottom: '12px'
+            }}>
+              🎄
+            </div>
+            <div style={{
+              fontSize: 'clamp(14px, 3vw, 16px)',
+              color: '#666',
+              marginBottom: '8px',
+              fontWeight: '500'
+            }}>
+              크리스마스까지
+            </div>
+            <div style={{
+              fontSize: 'clamp(36px, 10vw, 56px)',
+              fontWeight: 'bold',
+              background: 'linear-gradient(135deg, #c8102e, #0d7d4e)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              marginBottom: '4px',
+              lineHeight: '1.2'
+            }}>
+              {daysUntilChristmas}일
+            </div>
+            <div style={{
+              fontSize: 'clamp(12px, 2.5vw, 14px)',
+              color: '#999'
+            }}>
+              {daysUntilChristmas === 0 ? '🎉 오늘은 크리스마스입니다! 🎉' : '남았습니다!'}
+            </div>
+          </div>
+        </>
+      )}
 
       <AdSenseController position="bottom" />
     </div>

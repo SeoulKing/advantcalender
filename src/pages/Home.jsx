@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { createCalendar, getCalendar, findCalendarByName, checkCalendarNameExists } from '../lib/firestore';
 import { saveCalendarLink, getCalendarLinks, generateCalendarLink, generateGuestLink } from '../lib/localStorage';
 import { isFirebaseAvailable } from '../lib/mockStorage';
@@ -7,6 +7,7 @@ import AdSenseController from '../components/AdSenseController';
 
 export default function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [myCalendars, setMyCalendars] = useState([]);
   const [calendarDataMap, setCalendarDataMap] = useState({});
@@ -41,6 +42,21 @@ export default function Home() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // URL 파라미터로 스크롤 처리
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('scroll') === 'true') {
+      setTimeout(() => {
+        const element = document.getElementById('create-calendar');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // URL에서 파라미터 제거
+          window.history.replaceState({}, '', '/');
+        }
+      }, 100);
+    }
+  }, [location.search]);
 
   // 크리스마스까지 남은 일수 계산
   useEffect(() => {
@@ -370,7 +386,7 @@ export default function Home() {
       </div>
 
       {/* 새 캘린더 만들기 섹션 */}
-      <div className="christmas-card fade-in" style={{
+      <div id="create-calendar" className="christmas-card fade-in" style={{
         marginBottom: '32px',
         padding: 'clamp(24px, 8vw, 40px) clamp(16px, 5vw, 24px)',
         textAlign: 'center',

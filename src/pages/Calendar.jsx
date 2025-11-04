@@ -379,25 +379,16 @@ export default function Calendar() {
                   </div>
                 )}
                 {isChristmas && (
-                  <>
-                    <div style={{
-                      position: 'absolute',
-                      top: '1px',
-                      left: '1px',
-                      fontSize: '11px',
-                      animation: 'none'
-                    }}>
-                      🎄
-                    </div>
-                    <div style={{
-                      position: 'absolute',
-                      top: '1px',
-                      right: isFutureDate ? '14px' : '1px',
-                      fontSize: '10px'
-                    }}>
-                      ⭐
-                    </div>
-                  </>
+                  <div style={{
+                    position: 'absolute',
+                    top: '2px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    fontSize: '11px',
+                    animation: 'none'
+                  }}>
+                    🎄
+                  </div>
                 )}
                 {today && !isChristmas && !isFutureDate && !isLockedOutside && (
                   <div style={{
@@ -419,20 +410,11 @@ export default function Calendar() {
                         ? '#ffb600' 
                         : '#333',
                   fontWeight: isChristmas ? 'bold' : 'bold',
-                  lineHeight: '1'
+                  lineHeight: '1',
+                  marginTop: isChristmas ? '8px' : '0'
                 }}>
                   {day}
                 </div>
-                {isChristmas && (
-                  <div style={{
-                    fontSize: '8px',
-                    marginTop: '1px',
-                    color: '#ffb600',
-                    fontWeight: 'bold'
-                  }}>
-                    🎁
-                  </div>
-                )}
                 {messageCount > 0 && !isChristmas && (
                   <div style={{
                     fontSize: unlocked ? '9px' : '8px',
