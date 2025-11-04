@@ -50,7 +50,7 @@ export default function Home() {
       setTimeout(() => {
         const element = document.getElementById('create-calendar');
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
           // URL에서 파라미터 제거
           window.history.replaceState({}, '', '/');
         }
