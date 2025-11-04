@@ -656,7 +656,7 @@ export default function Calendar() {
             fontWeight: 'bold'
           }}
         >
-          ✉️ 메시지 쓰기
+          ✉️ 내게 메시지 쓰기
         </button>
       </div>
 
@@ -764,54 +764,62 @@ export default function Calendar() {
         );
       })()}
 
-      {/* 링크 복사 섹션 */}
+      {/* 링크 공유 섹션 */}
       <div className="christmas-card fade-in" style={{
         marginTop: '32px',
         padding: '24px'
       }}>
         <h3 style={{
           margin: 0,
-          marginBottom: '20px',
-          fontSize: '20px',
+          marginBottom: '24px',
+          fontSize: 'clamp(18px, 4vw, 22px)',
           fontWeight: 'bold',
           color: '#333'
         }}>
-          📋 캘린더 링크
+          📤 내 캘린더 공유하기
         </h3>
 
         <div style={{ marginBottom: '20px' }}>
           <div style={{ 
-            fontSize: '13px', 
-            color: '#666', 
-            marginBottom: '8px',
-            fontWeight: '500'
+            fontSize: '14px', 
+            color: '#c8102e', 
+            marginBottom: '10px',
+            fontWeight: 'bold'
           }}>
-            🔒 내 캘린더 링크 (메시지 확인용)
+            💌 게스트 링크 (이 링크를 공유하세요!)
           </div>
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+          <div style={{
+            fontSize: '12px',
+            color: '#666',
+            marginBottom: '8px'
+          }}>
+            가족과 친구들에게 이 링크를 공유하면 메시지를 작성할 수 있습니다.
+          </div>
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
             <input
               type='text'
-              value={generateCalendarLink(calendarId)}
+              value={generateGuestLink(calendarId)}
               readOnly
               style={{
                 flex: 1,
-                padding: '10px',
+                padding: '12px',
                 fontSize: '13px',
-                border: '2px solid #e0e0e0',
+                border: '2px solid #c8102e',
                 borderRadius: '8px',
-                background: '#f9f9f9'
+                background: '#fff',
+                fontWeight: '500'
               }}
             />
             <button
-              onClick={() => handleCopyLink(generateCalendarLink(calendarId))}
+              onClick={() => handleCopyLink(generateGuestLink(calendarId))}
               style={{
-                padding: '10px 16px',
-                background: '#2196F3',
+                padding: '12px 20px',
+                background: '#c8102e',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
-                fontSize: '13px',
+                fontSize: '14px',
                 fontWeight: 'bold',
                 whiteSpace: 'nowrap'
               }}
@@ -821,21 +829,28 @@ export default function Calendar() {
           </div>
 
           <div style={{ 
-            fontSize: '13px', 
+            fontSize: '14px', 
             color: '#666', 
-            marginBottom: '8px',
+            marginBottom: '10px',
             fontWeight: '500'
           }}>
-            💌 게스트 링크 (메시지 작성용 - 공유)
+            🔒 내 캘린더 링크 (메시지 확인용)
+          </div>
+          <div style={{
+            fontSize: '12px',
+            color: '#666',
+            marginBottom: '8px'
+          }}>
+            내가 받은 메시지를 확인할 수 있는 링크입니다.
           </div>
           <div style={{ display: 'flex', gap: '8px' }}>
             <input
               type='text'
-              value={generateGuestLink(calendarId)}
+              value={generateCalendarLink(calendarId)}
               readOnly
               style={{
                 flex: 1,
-                padding: '10px',
+                padding: '12px',
                 fontSize: '13px',
                 border: '2px solid #e0e0e0',
                 borderRadius: '8px',
@@ -843,15 +858,15 @@ export default function Calendar() {
               }}
             />
             <button
-              onClick={() => handleCopyLink(generateGuestLink(calendarId))}
+              onClick={() => handleCopyLink(generateCalendarLink(calendarId))}
               style={{
-                padding: '10px 16px',
+                padding: '12px 20px',
                 background: '#2196F3',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
-                fontSize: '13px',
+                fontSize: '14px',
                 fontWeight: 'bold',
                 whiteSpace: 'nowrap'
               }}

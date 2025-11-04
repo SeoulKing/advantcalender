@@ -542,38 +542,56 @@ export default function Home() {
               </div>
               
               <div style={{ marginBottom: '20px' }}>
-                <div style={{ 
-                  fontSize: '13px', 
-                  color: '#666', 
-                  marginBottom: '8px',
-                  fontWeight: '500'
+                <h4 style={{
+                  margin: 0,
+                  marginBottom: '16px',
+                  fontSize: 'clamp(16px, 4vw, 18px)',
+                  fontWeight: 'bold',
+                  color: '#333'
                 }}>
-                  🔒 내 캘린더 링크 (메시지 확인용)
+                  📤 내 캘린더 공유하기
+                </h4>
+
+                <div style={{ 
+                  fontSize: '14px', 
+                  color: '#c8102e', 
+                  marginBottom: '10px',
+                  fontWeight: 'bold'
+                }}>
+                  💌 게스트 링크 (이 링크를 공유하세요!)
                 </div>
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                <div style={{
+                  fontSize: '12px',
+                  color: '#666',
+                  marginBottom: '8px'
+                }}>
+                  가족과 친구들에게 이 링크를 공유하면 메시지를 작성할 수 있습니다.
+                </div>
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
                   <input
                     type='text'
-                    value={generateCalendarLink(cal.id)}
+                    value={generateGuestLink(cal.id)}
                     readOnly
                     style={{
                       flex: 1,
-                      padding: '10px',
+                      padding: '12px',
                       fontSize: '13px',
-                      border: '2px solid #e0e0e0',
+                      border: '2px solid #c8102e',
                       borderRadius: '8px',
-                      background: '#f9f9f9'
+                      background: '#fff',
+                      fontWeight: '500'
                     }}
                   />
                   <button
-                    onClick={() => handleCopyLink(generateCalendarLink(cal.id))}
+                    onClick={() => handleCopyLink(generateGuestLink(cal.id))}
                     style={{
-                      padding: '10px 16px',
-                      background: '#2196F3',
+                      padding: '12px 20px',
+                      background: '#c8102e',
                       color: 'white',
                       border: 'none',
                       borderRadius: '8px',
                       cursor: 'pointer',
-                      fontSize: '13px',
+                      fontSize: '14px',
                       fontWeight: 'bold',
                       whiteSpace: 'nowrap'
                     }}
@@ -583,21 +601,28 @@ export default function Home() {
                 </div>
 
                 <div style={{ 
-                  fontSize: '13px', 
+                  fontSize: '14px', 
                   color: '#666', 
-                  marginBottom: '8px',
+                  marginBottom: '10px',
                   fontWeight: '500'
                 }}>
-                  💌 게스트 링크 (메시지 작성용 - 공유)
+                  🔒 내 캘린더 링크 (메시지 확인용)
+                </div>
+                <div style={{
+                  fontSize: '12px',
+                  color: '#666',
+                  marginBottom: '8px'
+                }}>
+                  내가 받은 메시지를 확인할 수 있는 링크입니다.
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <input
                     type='text'
-                    value={generateGuestLink(cal.id)}
+                    value={generateCalendarLink(cal.id)}
                     readOnly
                     style={{
                       flex: 1,
-                      padding: '10px',
+                      padding: '12px',
                       fontSize: '13px',
                       border: '2px solid #e0e0e0',
                       borderRadius: '8px',
@@ -605,15 +630,15 @@ export default function Home() {
                     }}
                   />
                   <button
-                    onClick={() => handleCopyLink(generateGuestLink(cal.id))}
+                    onClick={() => handleCopyLink(generateCalendarLink(cal.id))}
                     style={{
-                      padding: '10px 16px',
-                      background: '#2196F3',
+                      padding: '12px 20px',
+                      background: '#757575',
                       color: 'white',
                       border: 'none',
                       borderRadius: '8px',
                       cursor: 'pointer',
-                      fontSize: '13px',
+                      fontSize: '14px',
                       fontWeight: 'bold',
                       whiteSpace: 'nowrap'
                     }}
