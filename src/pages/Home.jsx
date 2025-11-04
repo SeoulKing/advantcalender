@@ -69,7 +69,13 @@ export default function Home() {
 
   const loadMyCalendars = () => {
     const calendars = getCalendarLinks();
-    setMyCalendars(calendars);
+    // 최신순으로 정렬 (updatedAt 우선, 없으면 createdAt 사용)
+    const sortedCalendars = [...calendars].sort((a, b) => {
+      const aDate = a.updatedAt || a.createdAt || '';
+      const bDate = b.updatedAt || b.createdAt || '';
+      return new Date(bDate) - new Date(aDate); // 최신 것이 먼저
+    });
+    setMyCalendars(sortedCalendars);
   };
 
   const loadCalendarData = async () => {
@@ -299,7 +305,7 @@ export default function Home() {
             WebkitTextFillColor: 'transparent',
             fontWeight: 'bold'
           }}>
-            나의 캘린더
+            크리스마스를 기다리며
           </h1>
           <p style={{ color: '#666', marginTop: '8px', fontSize: 'clamp(14px, 3vw, 16px)' }}>
             가족과 친구들에게 메시지를 전달하세요!

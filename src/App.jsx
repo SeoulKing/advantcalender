@@ -35,7 +35,7 @@ export default function App() {
               gap: 'clamp(6px, 2vw, 12px)'
             }}
           >
-            <span>디지털 어드벤트 캘린더</span>
+            <span>어드벤트 캘린더</span>
           </Link>
           <Link 
             to='/' 

@@ -645,125 +645,6 @@ export default function Calendar() {
         );
       })()}
 
-      {/* 메시지 쓰기 버튼 - 캘린더 아래 */}
-      <div style={{ textAlign: 'center', marginTop: '24px' }}>
-        <button
-          onClick={() => navigate(`/guest/${calendarId}`)}
-          className="christmas-button"
-          style={{
-            padding: '14px 32px',
-            fontSize: '18px',
-            fontWeight: 'bold'
-          }}
-        >
-          ✉️ 내게 메시지 쓰기
-        </button>
-      </div>
-
-      {/* 캘린더 완성도 표시 */}
-      {calendar && (() => {
-        const { percentage, filledDates, totalDates, emptyDates } = calculateCompletionRate();
-        return (
-          <div className="christmas-card" style={{
-            marginTop: '24px',
-            marginBottom: '24px',
-            padding: '24px'
-          }}>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '12px'
-            }}>
-              <div style={{
-                fontSize: 'clamp(14px, 3vw, 16px)',
-                fontWeight: 'bold',
-                color: '#333'
-              }}>
-                📊 캘린더 완성도
-              </div>
-              <div style={{
-                fontSize: 'clamp(20px, 5vw, 28px)',
-                fontWeight: 'bold',
-                background: percentage === 100 
-                  ? 'linear-gradient(135deg, #0d7d4e, #4caf50)' 
-                  : 'linear-gradient(135deg, #c8102e, #d32f2f)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}>
-                {percentage}%
-              </div>
-            </div>
-            
-            {/* 프로그레스 바 - 크리스마스 캔디 스트라이프 */}
-            <div style={{
-              width: '100%',
-              height: '28px',
-              background: '#f0f0f0',
-              borderRadius: '14px',
-              overflow: 'hidden',
-              marginBottom: '12px',
-              boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1)',
-              position: 'relative'
-            }}>
-              <div style={{
-                width: `${percentage}%`,
-                height: '100%',
-                background: percentage === 100
-                  ? 'repeating-linear-gradient(45deg, #0d7d4e 0px, #0d7d4e 10px, #4caf50 10px, #4caf50 20px)'
-                  : 'repeating-linear-gradient(45deg, #c8102e 0px, #c8102e 10px, #ffffff 10px, #ffffff 20px)',
-                transition: 'width 0.5s ease',
-                borderRadius: '14px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#000000',
-                fontSize: '11px',
-                fontWeight: 'bold',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                position: 'relative'
-              }}>
-                {percentage > 10 && (
-                  <span>
-                    {filledDates}/{totalDates}
-                  </span>
-                )}
-              </div>
-            </div>
-            
-            {/* 동기부여 메시지 */}
-            {emptyDates > 0 ? (
-              <div style={{
-                fontSize: 'clamp(13px, 3vw, 15px)',
-                color: '#666',
-                textAlign: 'center',
-                padding: '8px',
-                background: 'linear-gradient(135deg, #ffeef5, #fff)',
-                borderRadius: '8px'
-              }}>
-                💝 아직 <strong style={{ color: '#c8102e' }}>{emptyDates}개의 날짜</strong>에 메시지가 없어요! 
-                <br />
-                <span style={{ fontSize: '12px', color: '#999' }}>
-                  가족과 친구들에게 게스트 링크를 공유해서 메시지를 받아보세요! ✉️
-                </span>
-              </div>
-            ) : (
-              <div style={{
-                fontSize: 'clamp(13px, 3vw, 15px)',
-                color: '#0d7d4e',
-                textAlign: 'center',
-                padding: '8px',
-                background: 'linear-gradient(135deg, #e8f5e9, #fff)',
-                borderRadius: '8px',
-                fontWeight: 'bold'
-              }}>
-                🎉 축하합니다! 모든 날짜(25일)에 메시지가 있습니다! 🎉
-              </div>
-            )}
-          </div>
-        );
-      })()}
-
       {/* 링크 공유 섹션 */}
       <div className="christmas-card fade-in" style={{
         marginTop: '32px',
@@ -875,6 +756,125 @@ export default function Calendar() {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* 캘린더 완성도 표시 */}
+      {calendar && (() => {
+        const { percentage, filledDates, totalDates, emptyDates } = calculateCompletionRate();
+        return (
+          <div className="christmas-card" style={{
+            marginTop: '32px',
+            marginBottom: '24px',
+            padding: '24px'
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '12px'
+            }}>
+              <div style={{
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                fontWeight: 'bold',
+                color: '#333'
+              }}>
+                📊 캘린더 완성도
+              </div>
+              <div style={{
+                fontSize: 'clamp(20px, 5vw, 28px)',
+                fontWeight: 'bold',
+                background: percentage === 100 
+                  ? 'linear-gradient(135deg, #0d7d4e, #4caf50)' 
+                  : 'linear-gradient(135deg, #c8102e, #d32f2f)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>
+                {percentage}%
+              </div>
+            </div>
+            
+            {/* 프로그레스 바 - 크리스마스 캔디 스트라이프 */}
+            <div style={{
+              width: '100%',
+              height: '28px',
+              background: '#f0f0f0',
+              borderRadius: '14px',
+              overflow: 'hidden',
+              marginBottom: '12px',
+              boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1)',
+              position: 'relative'
+            }}>
+              <div style={{
+                width: `${percentage}%`,
+                height: '100%',
+                background: percentage === 100
+                  ? 'repeating-linear-gradient(45deg, #0d7d4e 0px, #0d7d4e 10px, #4caf50 10px, #4caf50 20px)'
+                  : 'repeating-linear-gradient(45deg, #c8102e 0px, #c8102e 10px, #ffffff 10px, #ffffff 20px)',
+                transition: 'width 0.5s ease',
+                borderRadius: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#000000',
+                fontSize: '11px',
+                fontWeight: 'bold',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                position: 'relative'
+              }}>
+                {percentage > 10 && (
+                  <span>
+                    {filledDates}/{totalDates}
+                  </span>
+                )}
+              </div>
+            </div>
+            
+            {/* 동기부여 메시지 */}
+            {emptyDates > 0 ? (
+              <div style={{
+                fontSize: 'clamp(13px, 3vw, 15px)',
+                color: '#666',
+                textAlign: 'center',
+                padding: '8px',
+                background: 'linear-gradient(135deg, #ffeef5, #fff)',
+                borderRadius: '8px'
+              }}>
+                💝 아직 <strong style={{ color: '#c8102e' }}>{emptyDates}개의 날짜</strong>에 메시지가 없어요! 
+                <br />
+                <span style={{ fontSize: '12px', color: '#999' }}>
+                  가족과 친구들에게 게스트 링크를 공유해서 메시지를 받아보세요! ✉️
+                </span>
+              </div>
+            ) : (
+              <div style={{
+                fontSize: 'clamp(13px, 3vw, 15px)',
+                color: '#0d7d4e',
+                textAlign: 'center',
+                padding: '8px',
+                background: 'linear-gradient(135deg, #e8f5e9, #fff)',
+                borderRadius: '8px',
+                fontWeight: 'bold'
+              }}>
+                🎉 축하합니다! 모든 날짜(25일)에 메시지가 있습니다! 🎉
+              </div>
+            )}
+          </div>
+        );
+      })()}
+
+      {/* 메시지 쓰기 버튼 */}
+      <div style={{ textAlign: 'center', marginTop: '24px' }}>
+        <button
+          onClick={() => navigate(`/guest/${calendarId}`)}
+          className="christmas-button"
+          style={{
+            padding: '14px 32px',
+            fontSize: '18px',
+            fontWeight: 'bold'
+          }}
+        >
+          ✉️ 내게 메시지 쓰기
+        </button>
       </div>
 
       <AdSenseController position="bottom" />
