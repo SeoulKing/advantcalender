@@ -114,10 +114,15 @@ export default function Guest() {
     }
     // 날짜 선택 시 제출 섹션으로 스크롤
     setTimeout(() => {
-      document.getElementById('message-section')?.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start' 
-      });
+      const element = document.getElementById('message-section');
+      if (element) {
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - 50; // 상단 여백 50px
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
     }, 100);
   };
 
@@ -152,6 +157,9 @@ export default function Guest() {
       await saveMessage(calendarId, selectedDate, message.trim());
       alert('✅ 메시지가 저장되었습니다! 감사합니다! 💝');
       
+      // textarea blur 처리 (키보드가 올라오지 않도록)
+      document.getElementById('message-textarea')?.blur();
+      
       // 폼 초기화
       setMessage('');
       setSelectedDate('');
@@ -161,12 +169,15 @@ export default function Guest() {
       // 캘린더 새로고침
       await loadCalendar();
       
-      // "나도 캘린더 만들기" 섹션으로 스크롤
+      // "나도 캘린더 만들기" 섹션으로 스크롤 (중앙 정렬)
       setTimeout(() => {
-        document.getElementById('create-calendar-section')?.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'center' 
-        });
+        const element = document.getElementById('create-calendar-section');
+        if (element) {
+          element.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          });
+        }
       }, 300);
     } catch (error) {
       alert('메시지 저장에 실패했습니다.');
@@ -317,7 +328,7 @@ export default function Guest() {
               e.target.style.borderColor = '#e0e0e0';
               e.target.style.boxShadow = 'none';
             }}
-            autoFocus
+            autoFocus={!submitted}
           />
           <div style={{ 
             marginTop: '8px',
@@ -341,7 +352,7 @@ export default function Guest() {
                   const element = document.getElementById('date-selector-section');
                   if (element) {
                     const elementPosition = element.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - 100; // 상단 여백 100px
+                    const offsetPosition = elementPosition + window.pageYOffset - 50; // 상단 여백 50px
                     window.scrollTo({
                       top: offsetPosition,
                       behavior: 'smooth'
