@@ -421,13 +421,13 @@ export default function Home() {
 
       {/* 캘린더 찾기 섹션 */}
       <div className="christmas-card fade-in" style={{
-        marginBottom: '32px',
-        padding: '24px'
+        marginBottom: 'clamp(24px, 6vw, 32px)',
+        padding: 'clamp(20px, 5vw, 24px)'
       }}>
         <h2 style={{
           margin: 0,
-          marginBottom: '16px',
-          fontSize: '20px',
+          marginBottom: 'clamp(12px, 3vw, 16px)',
+          fontSize: 'clamp(18px, 4.5vw, 20px)',
           fontWeight: 'bold',
           color: '#333'
         }}>
@@ -435,12 +435,12 @@ export default function Home() {
         </h2>
         <p style={{
           color: '#666',
-          fontSize: '14px',
-          marginBottom: '20px'
+          fontSize: 'clamp(13px, 3vw, 14px)',
+          marginBottom: 'clamp(16px, 4vw, 20px)'
         }}>
           링크를 잃어버렸다면 캘린더 이름과 비밀번호로 찾을 수 있습니다.
         </p>
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 'clamp(10px, 2.5vw, 12px)', flexWrap: 'wrap' }}>
           <input
             type="text"
             placeholder="캘린더 이름"
@@ -449,8 +449,8 @@ export default function Home() {
             style={{
               flex: '1 1 200px',
               minWidth: '100%',
-              padding: '12px',
-              fontSize: '15px',
+              padding: 'clamp(10px, 2.5vw, 12px)',
+              fontSize: 'clamp(14px, 3.5vw, 15px)',
               border: '2px solid #e0e0e0',
               borderRadius: '8px',
               boxSizing: 'border-box'
@@ -464,8 +464,8 @@ export default function Home() {
             style={{
               flex: '1 1 200px',
               minWidth: '100%',
-              padding: '12px',
-              fontSize: '15px',
+              padding: 'clamp(10px, 2.5vw, 12px)',
+              fontSize: 'clamp(14px, 3.5vw, 15px)',
               border: '2px solid #e0e0e0',
               borderRadius: '8px',
               boxSizing: 'border-box'
@@ -478,8 +478,8 @@ export default function Home() {
             style={{
               flex: '1 1 200px',
               minWidth: '100%',
-              padding: '12px 24px',
-              fontSize: '16px',
+              padding: 'clamp(10px, 2.5vw, 12px) clamp(20px, 5vw, 24px)',
+              fontSize: 'clamp(15px, 3.5vw, 16px)',
               whiteSpace: 'nowrap'
             }}
           >
@@ -491,21 +491,21 @@ export default function Home() {
       {myCalendars.length === 0 ? (
         <div className="christmas-card fade-in" style={{
           textAlign: 'center',
-          padding: '80px 20px',
+          padding: 'clamp(40px, 10vw, 80px) clamp(16px, 4vw, 20px)',
           marginTop: '24px'
         }}>
-          <div style={{ fontSize: '64px', marginBottom: '24px' }}>🎁</div>
+          <div style={{ fontSize: 'clamp(48px, 12vw, 64px)', marginBottom: 'clamp(16px, 4vw, 24px)' }}>🎁</div>
           <h2 style={{ 
-            fontSize: '24px', 
+            fontSize: 'clamp(20px, 5vw, 24px)', 
             color: '#333', 
-            marginBottom: '16px',
+            marginBottom: 'clamp(12px, 3vw, 16px)',
             fontWeight: 'bold'
           }}>
             아직 캘린더가 없습니다
           </h2>
           <p style={{ 
             color: '#666',
-            fontSize: '16px',
+            fontSize: 'clamp(14px, 3vw, 16px)',
             lineHeight: '1.6'
           }}>
             위의 <span style={{ color: '#c8102e', fontWeight: 'bold' }}>"✨ 새 캘린더 만들기"</span> 버튼을 눌러<br />
@@ -514,30 +514,38 @@ export default function Home() {
         </div>
       ) : (
         <div style={{
-          maxWidth: '600px',
-          margin: '32px auto 0',
-          width: '100%'
+          maxWidth: 'clamp(100%, 90vw, 600px)',
+          margin: 'clamp(24px, 6vw, 32px) auto 0',
+          width: '100%',
+          boxSizing: 'border-box'
         }}>
           {myCalendars.slice(0, 1).map((cal) => (
             <div
               key={cal.id}
               className="christmas-card fade-in"
+              style={{
+                padding: 'clamp(20px, 5vw, 24px)',
+                width: '100%',
+                boxSizing: 'border-box'
+              }}
             >
               <div style={{ 
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'space-between',
-                marginBottom: '20px'
+                marginBottom: 'clamp(16px, 4vw, 20px)',
+                flexWrap: 'wrap',
+                gap: '12px'
               }}>
                 <div style={{ 
                   display: 'flex', 
                   alignItems: 'center', 
-                  gap: '12px'
+                  gap: 'clamp(8px, 2vw, 12px)'
                 }}>
-                  <div style={{ fontSize: '32px' }}>📅</div>
+                  <div style={{ fontSize: 'clamp(24px, 6vw, 32px)' }}>📅</div>
                   <h3 style={{ 
                     margin: 0, 
-                    fontSize: '20px',
+                    fontSize: 'clamp(18px, 4vw, 20px)',
                     fontWeight: 'bold',
                     color: '#333'
                   }}>
@@ -548,17 +556,18 @@ export default function Home() {
                 {/* 메시지 개수 표시 */}
                 <div style={{
                   background: 'linear-gradient(135deg, #e8f5e9, #c8e6c9)',
-                  padding: '6px 12px',
+                  padding: 'clamp(4px, 1vw, 6px) clamp(8px, 2vw, 12px)',
                   borderRadius: '20px',
-                  border: '2px solid #0d7d4e'
+                  border: '2px solid #0d7d4e',
+                  flexShrink: 0
                 }}>
                   <div style={{
-                    fontSize: '12px',
+                    fontSize: 'clamp(11px, 2.5vw, 12px)',
                     color: '#0d7d4e',
                     fontWeight: 'bold',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '4px'
+                    gap: 'clamp(2px, 1vw, 4px)'
                   }}>
                     <span>💌</span>
                     <span>
@@ -568,10 +577,10 @@ export default function Home() {
                 </div>
               </div>
               
-              <div style={{ marginBottom: '20px' }}>
+              <div style={{ marginBottom: 'clamp(16px, 4vw, 20px)' }}>
                 <h4 style={{
                   margin: 0,
-                  marginBottom: '16px',
+                  marginBottom: 'clamp(12px, 3vw, 16px)',
                   fontSize: 'clamp(16px, 4vw, 18px)',
                   fontWeight: 'bold',
                   color: '#333'
@@ -580,21 +589,21 @@ export default function Home() {
                 </h4>
 
                 <div style={{ 
-                  fontSize: '14px', 
+                  fontSize: 'clamp(13px, 3vw, 14px)', 
                   color: '#c8102e', 
-                  marginBottom: '10px',
+                  marginBottom: 'clamp(8px, 2vw, 10px)',
                   fontWeight: 'bold'
                 }}>
                   💌 게스트 링크 (이 링크를 공유하세요!)
                 </div>
                 <div style={{
-                  fontSize: '12px',
+                  fontSize: 'clamp(11px, 2.5vw, 12px)',
                   color: '#666',
-                  marginBottom: '8px'
+                  marginBottom: 'clamp(6px, 1.5vw, 8px)'
                 }}>
                   가족과 친구들에게 이 링크를 공유하면 메시지를 작성할 수 있습니다.
                 </div>
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexDirection: 'row', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: 'clamp(6px, 1.5vw, 8px)', marginBottom: 'clamp(20px, 5vw, 24px)', flexDirection: 'row', alignItems: 'center' }}>
                   <input
                     type='text'
                     value={generateGuestLink(cal.id)}
@@ -603,7 +612,7 @@ export default function Home() {
                       flex: 1,
                       minWidth: 0,
                       maxWidth: '100%',
-                      padding: '12px',
+                      padding: 'clamp(10px, 2.5vw, 12px)',
                       fontSize: 'clamp(11px, 3vw, 13px)',
                       border: '2px solid #c8102e',
                       borderRadius: '8px',
@@ -618,13 +627,13 @@ export default function Home() {
                   <button
                     onClick={() => handleCopyLink(generateGuestLink(cal.id))}
                     style={{
-                      padding: '12px 20px',
+                      padding: 'clamp(10px, 2.5vw, 12px) clamp(16px, 4vw, 20px)',
                       background: '#c8102e',
                       color: 'white',
                       border: 'none',
                       borderRadius: '8px',
                       cursor: 'pointer',
-                      fontSize: '14px',
+                      fontSize: 'clamp(13px, 3vw, 14px)',
                       fontWeight: 'bold',
                       whiteSpace: 'nowrap',
                       flexShrink: 0,
@@ -636,21 +645,21 @@ export default function Home() {
                 </div>
 
                 <div style={{ 
-                  fontSize: '14px', 
+                  fontSize: 'clamp(13px, 3vw, 14px)', 
                   color: '#666', 
-                  marginBottom: '10px',
+                  marginBottom: 'clamp(8px, 2vw, 10px)',
                   fontWeight: '500'
                 }}>
                   🔒 내 캘린더 링크 (메시지 확인용)
                 </div>
                 <div style={{
-                  fontSize: '12px',
+                  fontSize: 'clamp(11px, 2.5vw, 12px)',
                   color: '#666',
-                  marginBottom: '8px'
+                  marginBottom: 'clamp(6px, 1.5vw, 8px)'
                 }}>
                   내가 받은 메시지를 확인할 수 있는 링크입니다. 이 링크를 따로 저장해서 쉽게 메시지를 확인할 수 있습니다.
                 </div>
-                <div style={{ display: 'flex', gap: '8px', flexDirection: 'row', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: 'clamp(6px, 1.5vw, 8px)', flexDirection: 'row', alignItems: 'center' }}>
                   <input
                     type='text'
                     value={generateCalendarLink(cal.id)}
@@ -659,7 +668,7 @@ export default function Home() {
                       flex: 1,
                       minWidth: 0,
                       maxWidth: '100%',
-                      padding: '12px',
+                      padding: 'clamp(10px, 2.5vw, 12px)',
                       fontSize: 'clamp(11px, 3vw, 13px)',
                       border: '2px solid #e0e0e0',
                       borderRadius: '8px',
@@ -673,13 +682,13 @@ export default function Home() {
                   <button
                     onClick={() => handleCopyLink(generateCalendarLink(cal.id))}
                     style={{
-                      padding: '12px 20px',
+                      padding: 'clamp(10px, 2.5vw, 12px) clamp(16px, 4vw, 20px)',
                       background: '#757575',
                       color: 'white',
                       border: 'none',
                       borderRadius: '8px',
                       cursor: 'pointer',
-                      fontSize: '14px',
+                      fontSize: 'clamp(13px, 3vw, 14px)',
                       fontWeight: 'bold',
                       whiteSpace: 'nowrap',
                       flexShrink: 0,
@@ -691,14 +700,14 @@ export default function Home() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(10px, 2.5vw, 12px)' }}>
                 <button
                   onClick={() => navigate(`/calendar/${cal.id}`)}
                   className="christmas-button christmas-button-green"
                   style={{
                     width: '100%',
-                    padding: '14px',
-                    fontSize: '16px'
+                    padding: 'clamp(12px, 3vw, 14px)',
+                    fontSize: 'clamp(15px, 3.5vw, 16px)'
                   }}
                 >
                   🗓️ 캘린더 보기
@@ -709,8 +718,8 @@ export default function Home() {
                   className="christmas-button"
                   style={{
                     width: '100%',
-                    padding: '14px',
-                    fontSize: '16px'
+                    padding: 'clamp(12px, 3vw, 14px)',
+                    fontSize: 'clamp(15px, 3.5vw, 16px)'
                   }}
                 >
                   ✉️ 메시지 쓰기
