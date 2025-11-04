@@ -167,10 +167,26 @@ export default function Guest() {
           color: '#666', 
           fontSize: 'clamp(14px, 3vw, 16px)',
           lineHeight: '1.6',
-          margin: 0
+          margin: 0,
+          marginBottom: '24px'
         }}>
           따뜻한 메시지를 남겨주세요! 💝
         </p>
+        
+        {/* 내 캘린더 만들기 버튼 */}
+        <button
+          onClick={() => navigate('/')}
+          className="christmas-button"
+          style={{
+            padding: 'clamp(12px, 3vw, 16px) clamp(24px, 6vw, 32px)',
+            fontSize: 'clamp(14px, 3vw, 16px)',
+            fontWeight: 'bold',
+            marginTop: '16px',
+            minWidth: 'clamp(160px, 40vw, 200px)'
+          }}
+        >
+          ✨ 내 캘린더 만들기
+        </button>
       </div>
 
       {/* 달력 섹션 */}
